@@ -1,0 +1,24 @@
+<div role="tabpanel" class="tab-pane config-section active" id="general">
+	<form method="POST" autocomplete="off" class="w-100">
+		<div class="form-group">
+			<label for="ctf_name">
+				事件名称
+				<small class="form-text text-muted">当未指定徽标时，将使用CTF的事件名称作为替代。</small>
+			</label>
+			<input class="form-control" id='ctf_name' name='ctf_name' type='text' placeholder="请输入CTF名称"
+				{% if ctf_name is defined and ctf_name != None %}value="{{ ctf_name }}"{% endif %}>
+		</div>
+
+		<div class="form-group">
+			<label>
+				事件描述<br>
+				<small class="form-text text-muted">
+					您的CTF描述信息。可在自定义页面和电子邮件中使用 <code>{ctf_description}</code> 变量调用。
+				</small>
+			</label>
+			<textarea class="form-control" type="text" id="ctf_description" name="ctf_description" rows="5">{{ ctf_description }}</textarea>
+		</div>
+
+		<button type="submit" class="btn btn-md btn-primary float-right">更新设置</button>
+	</form>
+</div>

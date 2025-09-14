@@ -1,0 +1,109 @@
+文档:
+{% block header %}
+{% endblock %}
+
+<form method="POST">
+	{% block name %}
+	<div class="form-group">
+		<label>
+			名称<br>
+			<small class="form-text text-muted">题目名称</small>
+		</label>
+		<input type="text" class="form-control chal-name" name="name" value="{{ challenge.name }}">
+	</div>
+	{% endblock %}
+
+	{% block category %}
+	<div class="form-group">
+		<label>
+			分类<br>
+			<small class="form-text text-muted">题目分类</small>
+		</label>
+		<input type="text" class="form-control chal-category" name="category" value="{{ challenge.category }}">
+	</div>
+	{% endblock %}
+
+	{% block message %}
+	<div class="form-group">
+		<label>
+			描述信息<br>
+			<small class="form-text text-muted">
+				用此字段简要介绍你的题目
+			</small>
+		</label>
+		<textarea id="desc-editor" class="form-control chal-desc-editor markdown" name="description" rows="10">{{ challenge.description }}</textarea>
+	</div>
+	{% endblock %}
+
+	{% block attribution %}
+	<div class="form-group">
+		<label>
+			题目来源:<br>
+			<small class="form-text text-muted">
+				题目的归属信息 <small>（支持Markdown）</small>
+			</small>
+		</label>
+		<input type="text" class="form-control" name="attribution" value="{{ challenge.attribution }}">
+	</div>
+	{% endblock %}
+
+	{% block connection_info %}
+	<div class="form-group">
+		<label>
+			连接信息<br>
+			<small class="form-text text-muted">
+				用此字段指定题目的链接、主机名或连接说明
+			</small>
+		</label>
+		<input type="text" class="form-control chal-connection-info" name="connection_info" value="{{ challenge.connection_info | default('', true) }}">
+	</div>
+	{% endblock %}
+
+	{% block value %}
+	<div class="form-group">
+		<label for="value">
+			分值<br>
+			<small class="form-text text-muted">
+				此数值为队伍解决此题后获得的分数
+			</small>
+		</label>
+		<input type="number" class="form-control chal-value" name="value" value="{{ challenge.value }}" required>
+	</div>
+	{% endblock %}
+
+	{% block max_attempts %}
+	<div class="form-group">
+		<label>
+			最大尝试次数<br>
+			<small class="form-text text-muted">用户的最大尝试次数。设为0表示无限制</small>
+		</label>
+
+		<input type="number" class="form-control chal-attempts" name="max_attempts" value="{{ challenge.max_attempts }}">
+	</div>
+	{% endblock %}
+
+	{% block state %}
+	<div class="form-group">
+		<label>
+			状态<br>
+			<small class="form-text text-muted">控制题目可见性（如：可见、隐藏）</small>
+		</label>
+
+		<select class="form-control custom-select" name="state">
+			<option value="visible" {% if challenge.state == "visible" %}selected{% endif %}>可见</option>
+			<option value="hidden" {% if challenge.state == "hidden" %}selected{% endif %}>隐藏</option>
+		</select>
+	</div>
+	{% endblock %}
+
+	{% block submit %}
+	<div>
+		<button class="btn btn-success btn-outlined float-right" type="submit">
+			更新
+		</button>
+	</div>
+	{% endblock %}
+</form>
+
+{% block footer %}
+{% endblock %}

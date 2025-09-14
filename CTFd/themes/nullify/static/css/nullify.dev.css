@@ -1,0 +1,165 @@
+body {
+    background-color: #262626 !important;
+    color: white;
+}
+
+.bg-dark {
+    background-color: #303030 !important;
+}
+
+
+
+.jumbotron {
+    background: -webkit-linear-gradient(315deg, rgba(39, 150, 60, 0.5) 0%, #303030 80%);
+    background: -moz-linear-gradient(315deg, rgba(39, 150, 60, 0.5) 0%, #303030 80%);
+    background: -ms-linear-gradient(315deg, rgba(39, 150, 60, 0.5) 0%, #303030 80%);
+    background: -o-linear-gradient(315deg, rgba(39, 150, 60, 0.5) 0%, #303030 80%);
+    background: linear-gradient(315deg, #27963c80 0%, #303030 80%);
+    animation: _gradient_1mfahq 10s linear infinite;
+    background-size: 200%, 100%;
+    animation-direction: alternate;
+    background-color: #396841;
+}
+
+@keyframes _gradient_1mfahq {
+    0% {
+      background-position: 0%
+    }
+  
+    100% {
+      background-position: 50%
+    }
+}
+
+/* More todo here */
+.table {
+    color: #999999;
+}
+
+.input-filled-valid {
+    border-color: rgba(39, 150, 60, 0.5);
+    box-shadow: 0 0 0 0.1rem rgba(39, 150, 60, 0.5);
+    background-color: #353535 !important;
+}
+
+select {
+    color: white;
+    text-shadow: 1px #303030;
+}
+
+.form-control {
+    color: #d3d3d3;
+    background-color: #353535;
+    border: 1px solid #5c5c5c;
+}
+
+.form-control:focus {
+    border-color: rgba(39, 150, 60, 0.5);
+    box-shadow: 0 0 0 0.1rem rgba(39, 150, 60, 0.5);
+    background-color: #505050 !important;
+    transition: background-color 0.3s, border-color 0.3s;
+    color: #c9c9c9;
+}
+
+.form-control::placeholder {
+    color: #c2c2c2;
+}
+
+.btn-outline-secondary {
+    border-color: rgba(39, 150, 60, 0.5);
+    border-width: 2px;
+}
+
+.modal-content {
+    background-color: #303030;
+}
+
+.close {
+    color: white;
+    text-shadow: 0px 0px 6px black;
+}
+
+.close:focus {
+    color: grey;
+}
+
+.close > span {
+    color: #ffe;
+}
+
+.modal-header {
+    border-bottom: 1px solid #505050;
+}
+
+.modal-footer {
+    border-top: 1px solid #505050;
+}
+
+tbody {
+    background-color: #303030;
+}
+
+thead {
+    background-color: #202020;
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+    background-color: #3a3a3a;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.table th, .table td {
+    border-top: 1px solid #505050;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-lin {
+    background-color: #444444;
+    color: #d3d3d3;
+    border-color: #696969;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #696969;
+}
+
+.nav-tabs:hover {
+    border-color: #696969;
+}
+
+.btn-outline-secondary {
+    color: #c2c2c2;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #303030;
+    color: #d3d3d3;
+}
+
+.challenge-button {
+    background-color: #303030;
+    box-shadow: 3px 3px 3px #505050 !important;
+    color: #d3d3d3;
+}
+
+.solved-challenge {
+    opacity: 0.4;
+}
+
+.toast {
+    background-color: #303030;
+    border-color: #505050;
+}
+
+.toast-header {
+    background-color: #303030 !important;
+    color: white;
+}
+
+.toast-body {
+    background-color: #424242 !important;
+    color: #d3d3d3;
+}
+

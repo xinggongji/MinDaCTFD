@@ -1,0 +1,19 @@
+{% extends "admin/challenges/update.html" %}
+{% block value %}
+<div class="form-group">
+	<label for="value">Options<br>
+		<small class="form-text text-muted">
+			这是选项，用"#"分割。
+		</small>
+	</label>
+	<input type="text" class="form-control" name="flagchoose" value="{{ challenge.flagchoose }}" placeholder="例如:a#b#c#d" required>
+</div>
+<div class="form-group">
+	<label for="value">Value<br>
+		<small class="form-text text-muted">
+			本题分数。
+		</small>
+	</label>
+	<input type="number" class="form-control chal-value" name="value" value="{{ challenge.value }}" required>
+</div>
+{% endblock %}

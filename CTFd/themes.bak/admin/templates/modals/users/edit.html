@@ -1,0 +1,55 @@
+{% with form = Forms.users.UserEditForm(obj=user) %}
+{% from "admin/macros/forms.html" import render_extra_fields %}
+<form id="user-info-edit-form">
+	<div class="form-group">
+		{{ form.name.label("用户名") }}
+		{{ form.name(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.email.label("电子邮箱") }}
+		{{ form.email(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.language.label("语言") }}
+		{{ form.language(class="form-control custom-select", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.password.label("密码") }}
+		{{ form.password(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.website.label("个人网站") }}
+		{{ form.website(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.affiliation.label("所属机构") }}
+		{{ form.affiliation(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.country.label("国家/地区") }}
+		{{ form.country(class="form-control custom-select", autocomplete="off") }}
+	</div>
+
+	{{ render_extra_fields(form.extra) }}
+
+	<div class="form-group">
+		<div class="form-check form-check-inline">
+			{{ form.type(class="form-control form-inline custom-select", id="type-select") }}
+		</div>
+		<div class="form-check form-check-inline">
+			{{ form.verified(class="form-check-input", autocomplete="off") }}
+			{{ form.verified.label("已验证", class="form-check-label") }}
+		</div>
+		<div class="form-check form-check-inline">
+			{{ form.hidden(class="form-check-input", autocomplete="off") }}
+			{{ form.hidden.label("隐藏", class="form-check-label") }}
+		</div>
+		<div class="form-check form-check-inline">
+			{{ form.banned(class="form-check-input", autocomplete="off") }}
+			{{ form.banned.label("封禁", class="form-check-label") }}
+		</div>
+	</div>
+	<div id="results"></div>
+	{{ form.submit(class="btn btn-primary btn-outlined float-right modal-action", value="提交") }}
+</form>
+{% endwith %}

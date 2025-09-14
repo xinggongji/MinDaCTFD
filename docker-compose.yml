@@ -1,0 +1,94 @@
+services:
+  ctfd:
+    build: .
+    user: root
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - UPLOAD_FOLDER=/var/uploads
+      - DATABASE_URL=mysql+pymysql://ctfd:963852741lls603@db/ctfd
+      - REDIS_URL=redis://cache:6379
+      - WORKERS=1
+      - LOG_FOLDER=/var/log/CTFd
+      - ACCESS_LOG=-
+      - ERROR_LOG=-
+      - REVERSE_PROXY=true
+    volumes:
+      - .data/CTFd/logs:/var/log/CTFd
+      - .data/CTFd/uploads:/var/uploads
+      - .:/opt/CTFd:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - db
+    networks:
+        default:
+        internal:
+        frp:
+            ipv4_address: 172.1.0.2
+
+  nginx:
+    image: nginx:stable
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    depends_on:
+      - ctfd
+
+  db:
+    image: mariadb:10.11
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=147258369lls603
+      - MARIADB_USER=ctfd
+      - MARIADB_PASSWORD=963852741lls603
+      - MARIADB_DATABASE=ctfd
+      - MARIADB_AUTO_UPGRADE=1
+    volumes:
+      - .data/mysql:/var/lib/mysql
+    networks:
+        internal:
+    # This command is required to set important mariadb defaults
+    command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
+
+  cache:
+    image: redis:4
+    restart: always
+    volumes:
+    - .data/redis:/data
+    networks:
+        internal:
+  
+  frpc:
+    image: glzjin/frp:latest
+    restart: always
+    volumes:
+      - ./frp:/conf/
+    entrypoint:
+        - /usr/local/bin/frpc
+        - -c
+        - /conf/frpc.ini
+    networks:
+        frp:
+            ipv4_address: 172.1.0.3
+        frp_containers:
+
+networks:
+    default:
+    internal:
+        internal: true
+    frp:
+        driver: bridge
+        attachable: true
+        ipam:
+            config:
+                - subnet: 172.1.0.0/16
+    frp_containers:
+        driver: overlay
+        attachable: true
+        internal: true
+        ipam:
+            config:
+                - subnet: 172.2.0.0/16

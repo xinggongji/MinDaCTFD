@@ -1,0 +1,30 @@
+{% extends "admin/challenges/create.html" %}
+{% block header %}
+<div class="alert alert-secondary" role="alert">
+    这是一个多项选择题插件，选项填写在options中，用#分割选项。注意，请合理使用attempt限制答题次数，避免因答题次数过多导致暴力作答。
+</div>
+{% endblock %}
+{% block value %}
+    <div class="form-group">
+	    <label for="value">Options<br>
+		    <small class="form-text text-muted">
+			    这是选项，用"#"分割。
+		    </small>
+	    </label>
+	    <input type="text" class="form-control" name="flagchoose" placeholder="options" placeholder="例如:a#b#c#d" required>
+
+    </div>
+    <div class="form-group">
+	<label for="value">Value<br>
+		<small class="form-text text-muted">
+			本题分数。
+		</small>
+	</label>
+	<input type="number" class="form-control" name="value" placeholder="Enter value" required>
+
+</div>
+{% endblock %}
+{% block type %}
+
+<input type="hidden" value="multichoice" name="type" id="chaltype">
+{% endblock %}

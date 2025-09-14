@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+	<div class="jumbotron">
+		<div class="container">
+			<h1>确认</h1>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 offset-md-3">
+				{% include "components/errors.html" %}
+
+				<h5 class="text-center">
+					我们已向您的邮箱发送了一封确认邮件。
+				</h5>
+
+				<br>
+
+				<h5 class="text-center">
+					请点击邮件中的链接以完成账户验证。
+				</h5>
+
+				<br>
+
+				<h5 class="text-center">
+					如果未收到邮件，请检查垃圾邮件文件夹<br>
+					或联系管理员进行人工验证。
+				</h5>
+
+				<hr>
+
+				{% with form = Forms.auth.ConfirmForm() %}
+				<form method="POST" action="{{ url_for('auth.confirm') }}">
+					<div class="row">
+						<div class="col-md-6">
+							{{ form.submit(class="btn btn-md btn-primary btn-outlined w-100", value="重新发送邮件") }}
+						</div>
+						<div class="col-md-6">
+							<a href="{{ url_for('views.settings') }}" class="btn btn-md btn-secondary btn-outlined w-100">
+								更改邮箱地址
+							</a>
+						</div>
+						{{ form.nonce() }}
+					</div>
+				</form>
+				{% endwith %}
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

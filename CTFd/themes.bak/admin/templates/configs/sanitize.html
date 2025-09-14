@@ -1,0 +1,28 @@
+<div role="tabpanel" class="tab-pane config-section" id="sanitize">
+	{% set html_sanitization = "true" if html_sanitization == True else "false" %}
+	<form method="POST" autocomplete="off" class="w-100">
+		<div class="form-group">
+			<label for="html_sanitization">
+				HTML清理功能
+				<small class="form-text text-muted">
+					是否启用CTFd对内容中的HTML进行清理
+				</small>
+			</label>
+			<select class="form-control custom-select" name="html_sanitization">
+				{% if force_html_sanitization %}
+				<option>
+					强制启用（需在config.ini中禁用）
+				</option>
+				{% else %}
+				<option value="true" {% if html_sanitization=='true' %}selected{% endif %}>
+					启用
+				</option>
+				<option value="false" {% if html_sanitization=='false' %}selected{% endif %}>
+					禁用
+				</option>
+				{% endif %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-md btn-primary float-right">更新</button>
+	</form>
+</div>

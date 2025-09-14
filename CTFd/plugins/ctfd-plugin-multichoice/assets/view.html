@@ -1,0 +1,18 @@
+{% extends "challenge.html" %}
+{% block description %}
+    {{ challenge.html }}  <!-- Markdown 描述 -->
+    {% for option in challenge.flagchoose.split('#') %}
+        <div class="form-check">
+            <input 
+                type="radio" 
+                name="answer" 
+                value="{{ option }}"  
+                onclick="
+                    document.getElementById('challenge-input').value = this.value;
+                    document.getElementById('challenge-input').dispatchEvent(new Event('input'));
+                "
+            >
+            <label>{{ option }}</label>
+        </div>
+    {% endfor %}
+{% endblock %}

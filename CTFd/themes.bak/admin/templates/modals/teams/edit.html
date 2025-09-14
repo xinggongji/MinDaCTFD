@@ -1,0 +1,47 @@
+文档:
+{% with form = Forms.teams.TeamEditForm(obj=team) %}
+{% from "admin/macros/forms.html" import render_extra_fields %}
+<form id="team-info-edit-form" method="POST">
+	<div class="form-group">
+		{{ form.name.label("队伍名称") }}
+		{{ form.name(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.email.label("邮箱") }}
+		{{ form.email(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.password.label("密码") }}
+		{{ form.password(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.website.label("网站") }}
+		{{ form.website(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.affiliation.label("所属单位") }}
+		{{ form.affiliation(class="form-control", autocomplete="off") }}
+	</div>
+	<div class="form-group">
+		{{ form.country.label("国家/地区") }}
+		{{ form.country(class="form-control custom-select", autocomplete="off") }}
+	</div>
+
+	{{ render_extra_fields(form.extra) }}
+
+	<div class="form-group">
+		<div class="form-check form-check-inline">
+			{{ form.hidden(class="form-check-input", autocomplete="off") }}
+			{{ form.hidden.label(class="form-check-label", text="隐藏队伍") }}
+		</div>
+		<div class="form-check form-check-inline">
+			{{ form.banned(class="form-check-input", autocomplete="off") }}
+			{{ form.banned.label(class="form-check-label", text="封禁队伍") }}
+		</div>
+	</div>
+	<div id="results">
+
+	</div>
+	{{ form.submit(id="update-team", class="btn btn-primary btn-outlined float-right modal-action", value="更新队伍") }}
+</form>
+{% endwith %}
