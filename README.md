@@ -42,7 +42,7 @@ docker-compose up -d
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-19%20214812.png)
 ## 动态靶机配置
 
-#### 1.  进入目录Frp-Docker-For-CTFd-Whale-double并输入
+#### 1.  进入目录Frp-Docker-For-CTFd-Whale-double并输入（第一条命令如果第一次启动会warning容器未找到 直接忽略就好）
 
 ```
 docker-compose down
@@ -60,7 +60,7 @@ docker-compose up -d
 vim frpc.ini
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235056.png)
-#### 4. 再进入目录Frp-Docker-For-CTFd-Whale-double 并进入frp目录 将frps.ini中内容复制到下图位置
+#### 4. 再进入目录Frp-Docker-For-CTFd-Whale-double 并进入frp目录 将frps.ini中内容改为下图位置中内容
 
 ```
 cat frps.ini
@@ -87,7 +87,7 @@ sudo vim /lib/systemd/system/docker.service
 ```
 unix:///var/run/docker.sock -H tcp://192.168.147.132:2365
 ```
-#### 8. 重启docker
+#### 8. 重启docker （可能稍慢需等待一会
 
 ```
 systemctl daemon-reload
