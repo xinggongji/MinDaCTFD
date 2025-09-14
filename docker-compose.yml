@@ -17,7 +17,6 @@ services:
     volumes:
       - .data/CTFd/logs:/var/log/CTFd
       - .data/CTFd/uploads:/var/uploads
-      - .:/opt/CTFd:ro
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - db
