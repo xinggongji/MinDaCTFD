@@ -54,7 +54,7 @@ docker-compose up -d
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20154720.png)
 #### 2.  在靶场管理面板的whale--路由 并按照下图修改（ip地址记得换）
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20155018.png)
-#### 3. 退回到min-da-ctfd目录 并进入frp目录 修改frpc.ini中的serve-addr为环境机ip 并将内容复制到靶场管理面板的whale--路由
+#### 3. 退回到min-da-ctfd目录 并进入frp目录 修改frpc.ini中的serve-addr为环境机ip 并将内容复制到靶场管理面板的whale--路由 之后点击提交下方出现生成模版
 
 ```
 vim frpc.ini
@@ -67,13 +67,13 @@ cat frps.ini
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235125.png)
 
-#### 5. 退回到min-da-ctfd目录 查看重启容器min-da-ctfd_frpc_1 并将该容器名字复制到下图位置（管理面板--whale--docker）
+#### 5. 退回到min-da-ctfd目录 重启容器min-da-ctfd_frpc_1（只需要重启这一个容器） 并将该容器名字复制到下图位置（管理面板--whale--docker）
 
 ```
 docker restart min-da-ctfd_frpc_1
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235552.png)
-#### 6. `docker network ls` 查看并复制标注内容到图2位置 
+#### 6. `docker network ls` 查看并复制标注内容`min-da-ctfd_frp_containers`到图2位置 
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235632.png)
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235703.png)
 #### 7.  `systemctl status docker` 将标注目录中文件 **以管理员权限** 改写（其原内容为fd://）为图2所示 （端口号可以自拟 不冲突即可）
