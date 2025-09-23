@@ -60,23 +60,13 @@ docker-compose up -d
 vim frpc.ini
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235056.png)
-#### 4. 再进入目录Frp-Docker-For-CTFd-Whale-double 并进入frp目录 将frps.ini中内容改为下图位置中内容
+#### 4. 将容器名min-da-ctfd_frpc_1复制到下图位置（管理面板--whale--docker）
 
-```
-cat frps.ini
-```
-![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235125.png)
-
-#### 5. 退回到min-da-ctfd目录 重启容器min-da-ctfd_frpc_1（只需要重启这一个容器） 并将该容器名字复制到下图位置（管理面板--whale--docker）
-
-```
-docker restart min-da-ctfd_frpc_1
-```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235552.png)
-#### 6. `docker network ls` 查看并复制标注内容`min-da-ctfd_frp_containers`到图2位置 
+#### 5. `docker network ls` 查看并复制标注内容`min-da-ctfd_frp_containers`到图2位置 
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235632.png)
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235703.png)
-#### 7.  `systemctl status docker` 将标注目录中文件 **以管理员权限** 改写（其原内容为fd://）为图2所示 （端口号可以自拟 不冲突即可）
+#### 6.  `systemctl status docker` 将标注目录中文件 **以管理员权限** 改写（其原内容为fd://）为图2所示 （端口号可以自拟 不冲突即可）
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235850.png)
 
 ```
@@ -87,7 +77,7 @@ sudo vim /lib/systemd/system/docker.service
 ```
 unix:///var/run/docker.sock -H tcp://192.168.147.132:2365
 ```
-#### 8. 重启docker （可能稍慢需等待一会
+#### 7. 重启docker （可能稍慢需等待一会
 
 ```
 systemctl daemon-reload
@@ -96,5 +86,5 @@ systemctl daemon-reload
 ```
 systemctl restart docker
 ```
-#### 9. 最后将api URL更换为环境机ip加端口
+#### 8. 最后将api URL更换为环境机ip加端口
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20000506.png)
