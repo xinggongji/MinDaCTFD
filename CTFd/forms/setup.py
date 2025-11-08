@@ -56,6 +56,19 @@ class SetupForm(BaseForm):
         description=_l("Your password for the administration account"),
         validators=[InputRequired()],
     )
+    # 添加真实姓名字段
+    realname = StringField(
+        _l("Real Name"),
+        description=_l("Your real name for the administration account"),
+        validators=[InputRequired()],
+    )
+    
+    # 添加班级字段
+    classname = StringField(
+        _l("Class"),
+        description=_l("Your class for the administration account"),
+        validators=[InputRequired()],
+    )
 
     ctf_logo = FileField(
         _l("Logo"),

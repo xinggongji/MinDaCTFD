@@ -358,7 +358,9 @@ class Users(db.Model):
     email = db.Column(db.String(128), unique=True)
     type = db.Column(db.String(80))
     secret = db.Column(db.String(128))
-
+    realname = db.Column(db.String(128))  # 添加真实姓名字段
+    classname = db.Column(db.String(128))  # 添加班级字段
+    
     # Supplementary attributes
     website = db.Column(db.String(128))
     affiliation = db.Column(db.String(128))

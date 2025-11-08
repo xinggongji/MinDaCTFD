@@ -22,8 +22,11 @@ def RegistrationForm(*args, **kwargs):
         )
         email = EmailField(_l("Email"), validators=[InputRequired()])
         password = PasswordField(_l("Password"), validators=[InputRequired()])
+        # 添加姓名班级
+        realname = StringField(_l("Real Name"), validators=[InputRequired()])
+        classname = StringField(_l("Class"), validators=[InputRequired()])
         submit = SubmitField(_l("Submit"))
-
+        
         @property
         def extra(self):
             return (

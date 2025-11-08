@@ -147,7 +147,9 @@ def setup():
             name = request.form["name"]
             email = request.form["email"]
             password = request.form["password"]
-
+            # 添加姓名班级获取新字段
+            realname = request.form.get("realname")
+            classname = request.form.get("classname")
             name_len = len(name) == 0
             names = (
                 Users.query.add_columns(Users.name, Users.id)
@@ -190,9 +192,9 @@ def setup():
                 )
 
             admin = Admins(
-                name=name, email=email, password=password, type="admin", hidden=True
+                name=name, email=email, password=password, realname=realname, classname=classname, type="admin", hidden=True
             )
-
+            #加班级姓名
             # Create an empty index page
             page = Pages(title=ctf_name, route="index", content="", draft=False)
 

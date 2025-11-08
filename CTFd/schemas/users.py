@@ -37,6 +37,27 @@ class UserSchema(ma.ModelSchema):
             validate.Length(min=1, max=128, error="Emails must not be empty"),
         ],
     )
+    # 添加真实姓名字段
+    realname = field_for(
+        Users,
+        "realname",
+        required=True,
+        allow_none=False,
+        validate=[
+            validate.Length(min=1, max=128, error="Real name must not be empty")
+        ],
+    )
+    
+    # 添加班级字段
+    classname = field_for(
+        Users,
+        "classname",
+        required=True,
+        allow_none=False,
+        validate=[
+            validate.Length(min=1, max=128, error="Class name must not be empty")
+        ],
+    )
     website = field_for(
         Users,
         "website",
@@ -369,6 +390,9 @@ class UserSchema(ma.ModelSchema):
             "password",
             "fields",
             "team_id",
+            # 添加真实姓名和班级到个人视图
+            "realname",
+            "classname",
         ],
         "admin": [
             "website",
@@ -389,6 +413,9 @@ class UserSchema(ma.ModelSchema):
             "verified",
             "fields",
             "team_id",
+            # 添加真实姓名和班级到管理员视图
+            "realname",
+            "classname",
         ],
     }
 

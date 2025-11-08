@@ -203,7 +203,10 @@ def register():
         name = request.form.get("name", "").strip()
         email_address = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "").strip()
-
+        #班级姓名
+        realname = request.form.get("realname", "").strip()
+        classname = request.form.get("classname", "").strip()
+        
         website = request.form.get("website")
         affiliation = request.form.get("affiliation")
         country = request.form.get("country")
@@ -309,6 +312,9 @@ def register():
                 name=request.form["name"],
                 email=request.form["email"],
                 password=request.form["password"],
+                # 添加班级姓名保持字段回显
+                realname=request.form.get("realname", ""),
+                classname=request.form.get("classname", "")
             )
         else:
             with app.app_context():
@@ -317,6 +323,9 @@ def register():
                     email=email_address,
                     password=password,
                     bracket_id=bracket_id,
+                    #班级姓名
+                    realname=realname,
+                    classname=classname
                 )
 
                 if website:

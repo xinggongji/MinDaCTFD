@@ -13,6 +13,16 @@
 		{{ form.password.label }}
 		{{ form.password(class="form-control", autocomplete="off") }}
 	</div>
+	<!-- 添加真实姓名字段 -->
+	<div class="form-group">
+   		{{ form.realname.label }}
+    	{{ form.realname(class="form-control", autocomplete="off") }}
+	</div>
+	<!-- 添加班级字段 -->
+	<div class="form-group">
+    	{{ form.classname.label }}
+    	{{ form.classname(class="form-control", autocomplete="off") }}
+	</div>
 	<div class="form-group">
 		{{ form.website.label }}
 		<small class="float-right text-muted align-text-bottom">Optional</small>

@@ -46,6 +46,22 @@
 						Password used to log into your account
 					</small>
 				</div>
+				<!-- 添加真实姓名字段 -->
+				<div class="form-group">
+					<label for="realname"><b>真实姓名</b></label>
+					<input type="text" class="form-control" id="realname" name="realname" value="{{ realname or '' }}" required>
+					<small class="form-text text-muted">
+						请输入您的真实姓名
+					</small>
+				</div>
+				<!-- 添加班级字段 -->
+				<div class="form-group">
+					<label for="classname"><b>班级</b></label>
+					<input type="text" class="form-control" id="classname" name="classname" value="{{ classname or '' }}" required>
+					<small class="form-text text-muted">
+						请输入您的班级
+					</small>
+				</div>
 				{{ form.nonce() }}
 
 				{{ render_extra_fields(form.extra) }}
