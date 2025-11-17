@@ -19,7 +19,6 @@ services:
       - .data/CTFd/uploads:/var/uploads
       - /var/run/docker.sock:/var/run/docker.sock
       - ./CTFd/plugins:/opt/CTFd/CTFd/plugins
-      - ./:/opt/CTFd
     depends_on:
       - db
     networks:
