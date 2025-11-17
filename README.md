@@ -38,7 +38,16 @@ docker node update --label-add='name=linux-1' $(docker node ls -q)
 docker-compose up -d
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20124301.png)
-#### 5. 访问环境机ip的80端口即可看到CFTD靶场
+#### 5. 进行数据库更新新增字段防止报错
+`docker-compose exec ctfd flask db migrate -m "add new fields"`
+
+
+```
+docker-compose exec ctfd flask db upgrade
+```
+
+
+#### 6. 访问环境机ip的80端口即可看到CFTD靶场
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-19%20214812.png)
 ## 动态靶机配置
 
