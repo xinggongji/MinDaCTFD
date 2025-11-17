@@ -39,7 +39,11 @@ docker-compose up -d
 ```
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20124301.png)
 #### 5. 进行数据库更新新增字段防止报错
-`docker-compose exec ctfd flask db migrate -m "add new fields"`
+
+```
+docker-compose exec ctfd flask db migrate -m "add new fields"
+```
+
 
 
 ```
