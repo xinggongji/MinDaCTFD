@@ -47,32 +47,32 @@
 			</button>
 			<div class="collapse navbar-collapse" id="base-navbars">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.statistics') }}">Statistics</a></li>
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.notifications') }}">Notifications</a>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.statistics') }}">用户统计</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.notifications') }}">通知</a>
 					</li>
 					<li class="nav-item dropdown">
-						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Pages</a>
+						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">页面</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="{{ url_for('admin.pages_listing') }}">All Pages</a>
-							<a class="dropdown-item" href="{{ url_for('admin.pages_new') }}">New Page</a>
+							<a class="dropdown-item" href="{{ url_for('admin.pages_listing') }}">全部页面</a>
+							<a class="dropdown-item" href="{{ url_for('admin.pages_new') }}">新建页面</a>
 						</div>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.users_listing') }}">Users</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.users_listing') }}">用户</a></li>
 					{% if get_config('user_mode') == 'teams' %}
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.teams_listing') }}">Teams</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.teams_listing') }}">团队</a></li>
 					{% endif %}
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.scoreboard_listing') }}">Scoreboard</a></li>
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.challenges_listing') }}">Challenges</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.scoreboard_listing') }}">计分板</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.challenges_listing') }}">题目</a></li>
 					<li class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-						   aria-haspopup="true" aria-expanded="true">Submissions</a>
+						   aria-haspopup="true" aria-expanded="true">flag提交统计</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing') }}">All Submissions</a>
-							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing', submission_type='correct') }}">Correct Submissions</a>
-							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing', submission_type='incorrect') }}">Incorrect Submissions</a>
+							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing') }}">全部提交</a>
+							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing', submission_type='correct') }}">正确提交</a>
+							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing', submission_type='incorrect') }}">错误提交</a>
 						</div>
 					</li>
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.config') }}">Config</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.config') }}">设置</a></li>
 
 					{% set plugin_menu = get_admin_plugin_menu_bar() %}
 					{% set plugins = get_menubar_plugins() %}
@@ -96,7 +96,7 @@
 
 						{% if plugins %}
 						<li class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Plugins <span class="caret"></span></a>
+							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">插件管理 <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 									{% for plugin in plugins %}
 											<a class="dropdown-item" href="{{ request.script_root }}{{ plugin.route }}">{{ plugin.name }}</a>
@@ -118,31 +118,18 @@
 	</nav>
 
 	<main role="main">
-		{% if get_config('version_latest') %}
-		<div class="container-fluid bg-warning text-center py-3">
-			<div class="row">
-				<div class="col-md-12">
-					<a class="btn btn-warning" href="{{ get_config('version_latest') }}">
-						A new CTFd version is available!
-					</a>
-				</div>
-			</div>
-		</div>
-		{% endif %}
 		{% block content %}
 		{% endblock %}
 	</main>
 
 	<footer class="footer pt-2">
 		<div class="container text-center">
-			<a href="https://ctfd.io" class="text-secondary">
+			<a class="text-secondary">
 				<small class="text-muted">
-					Powered by CTFd
+					由人工智能攻坚团队维护改进
 				</small>
 			</a>
-			<span>
-				<small class="text-muted"><br> Version {{ get_config('ctf_version') }}</small>
-			</span>
+			
 		</div>
 	</footer>
 

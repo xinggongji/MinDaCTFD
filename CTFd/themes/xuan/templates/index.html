@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{# 声明为首页模板，提高优先级 #}
+{% set page = "index" %}
+
+{% block body_class %}custom-index-page{% endblock %}
+
+{# 引入自定义样式（基于 core 主题的路径） #}
+{% block stylesheets %}
+{{ super() }}  {# 保留 core 主题的原有样式 #}
+<link rel="stylesheet" href="{{ url_for('themes.static', filename='css/index.css') }}">
+{% endblock %}
+
+{# 强制覆盖首页内容 #}
+{% block content %}
+<!-- 测试标记：确认 index.html 生效 -->
+<div style="position: fixed; top: 20px; left: 20px; z-index: 999; color: red;">INDEX.HTML 已加载</div>
+
+<!-- 开屏动效容器 -->
+<div class="custom-splash-screen">
+  <div class="custom-splash-content">
+    <h1 class="custom-dynamic-title">{{ Configs.ctf_name }}</h1>
+    <p class="custom-dynamic-subtitle">欢迎参与挑战</p>
+  </div>
+</div>
+
+<!-- 原有首页内容（从 core 主题继承） -->
+<div class="custom-home-main">
+  {{ super() }}  {# 加载 core 主题原有的首页内容 #}
+</div>
+{% endblock %}
+
+{# 引入自定义脚本 #}
+{% block scripts %}
+{{ super() }}  {# 保留 core 主题的原有脚本 #}
+<script src="{{ url_for('themes.static', filename='js/pages/index.js') }}"></script>
+{% endblock %}
