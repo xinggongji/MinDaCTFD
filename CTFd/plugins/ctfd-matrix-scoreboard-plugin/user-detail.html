@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron home">
+    <div class="container">
+        <h1>个人信息</h1>
+    </div>
+</div>
+
+<div class="container main-container">
+    {% if errors %}
+        {% for error in errors %}<div class="alert alert-danger">{{ error }}</div>{% endfor %}
+    {% else %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">用户信息</h5>
+                <p><strong>用户名：</strong>{{ user.name }}</p>
+                <p><strong>所属团队：</strong>{{ team.name if team else '无' }}</p>
+                <p><strong>总解题数：</strong>{{ solve_count }}</p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h3>解题记录</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>题目名称</th>
+                        <th>题目类型</th>
+                        <th>解题时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solve in solves %}
+                        <tr>
+                            <td>{{ solve.chal_name }}</td>
+                            <td>{{ solve.category }}</td>
+                            <td>{{ solve.solve_time }}</td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="3" class="text-center">暂无解题记录</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

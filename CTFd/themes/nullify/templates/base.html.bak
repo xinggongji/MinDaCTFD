@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ Configs.ctf_name }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ Configs.ctf_small_icon }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('views.themes', path='css/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes', path='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes', path='css/core.css') }}">
+    <link rel="stylesheet" href="{{ url_for('views.themes', path='css/nullify.css') }}">
+    {% block stylesheets %}
+    {% endblock %}
+
+    {{ Plugins.styles }}
+    <script type="text/javascript">
+        var init = {
+            'urlRoot': "{{ request.script_root }}",
+            'csrfNonce': "{{ Session.nonce }}",
+            'userMode': "{{ Configs.user_mode }}", 
+            'userId': {{ Session.id }},
+            'start': {{ Configs.start | tojson }},
+            'end': {{ Configs.end | tojson }},
+            'theme_settings': {{ Configs.theme_settings | tojson }}
+        }
+    </script>
+    <style>
+        body {
+            background-image: url('/themes/nullify/static/img/bb.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        /* 新增弹窗样式 */
+        #gxmzu-alert {
+            position: fixed;top: 50%;left: 50%;
+            transform: translate(-50%,-50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            z-index: 9999;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+        #gxmzu-alert button {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: #2196F3;
+            border: none;
+            color: white;
+            border-radius: 4px;
+        }
+    </style>
+    {{ Configs.theme_header }}
+</head>
+<body>
+    {% include "components/navbar.html" %}
+
+    <main role="main">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <small class="text-muted">由民大信息安全竞赛平台提供技术支持</small>
+        </div>
+    </footer>
+
+    <!-- 新增弹窗结构 -->
+    <div id="gxmzu-alert" style="display:none;">
+        <p>有新的公告发出，请前往公告查收！！！</p>
+        <button onclick="handleNoticeConfirm()">确认</button>
+    </div>
+
+    <script>
+    // 公告处理系统
+    let unreadNotices = []
+    const STORAGE_KEY = 'gxmzu_read_notices'
+
+    function handleNoticeConfirm() {
+        if(unreadNotices.length > 0){
+            const confirmedId = unreadNotices.shift()
+            const readIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...readIds, confirmedId]))
+            
+            if(unreadNotices.length > 0){
+                showNextNotice()
+            }else{
+                document.getElementById('gxmzu-alert').style.display = 'none'
+            }
+        }
+    }
+
+    function showNextNotice() {
+        document.getElementById('gxmzu-alert').style.display = 'block'
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/api/v1/notifications')
+        .then(r => r.json())
+        .then(({ data }) => {
+            const readIds = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
+            unreadNotices = data
+                .filter(n => !readIds.includes(n.id))
+                .map(n => n.id)
+                .reverse() 
+
+            if(unreadNotices.length > 0){
+                showNextNotice()
+            }
+        })
+    })
+    </script>
+
+    <!-- 原有脚本保持不变 -->
+    <script defer src="{{ url_for('views.themes', path='js/vendor.bundle.js') }}"></script>
+    <script defer src="{{ url_for('views.themes', path='js/core.js') }}"></script>
+    <script defer src="{{ url_for('views.themes', path='js/helpers.js') }}"></script>
+    {% block entrypoint %}
+    <script defer src="{{ url_for('views.themes', path='js/pages/main.js') }}"></script>
+    <style>
+    /* 新增弹窗样式 */
+    #gxmzu-alert {
+        position: fixed;
+        top: -100%; 
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20%;
+        height: 20vh; 
+        background: #808080; 
+        color: #00BFFF; 
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        z-index: 9999;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        animation: slideDown 0.5s forwards;
+    }
+
+    @keyframes slideDown {
+        from { top: -100%; }
+        to { top: 5%; } 
+    }
+
+    #gxmzu-alert button {
+        margin-top: 15px;
+        padding: 12px 30px;
+        background: #4CAF50; 
+        border: none;
+        color: white;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+    }
+
+    #gxmzu-alert button:hover {
+        opacity: 0.9;
+    }
+</style>
+    {% endblock %}
+    {% block scripts %}
+    {% endblock %}
+    {{ Plugins.scripts }}
+    {{ Configs.theme_footer }}
+</body>
+</html>

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+<style>
+/* 保留类型导航样式，删除矩阵相关样式 */
+.category-nav {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+.category-nav a {
+    display: inline-block;
+    margin: 0 8px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+}
+.category-nav a.active {
+    background: #007bff;
+    color: white;
+    border-radius: 4px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron home">
+    <div class="container">
+        <h1>积分榜</h1>
+        <!-- 保留题目类型导航 -->
+        <div class="category-nav">
+            <a href="{{ url_for('scoreboard.listing') }}" class="{% if not current_category %}active{% endif %}">总分排名</a>
+            {% for cat in categories %}
+            <a href="{{ url_for('scoreboard.listing', category=cat) }}" class="{% if current_category == cat %}active{% endif %}">{{ cat }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="container main-container">
+    {% if errors %}
+        <div id='errors' class="row">
+            {% for error in errors %}<h1>{{ error }}</h1>{% endfor %}
+        </div>
+    {% else %}
+        {% if score_frozen %}
+            <div class="row"><h1>积分榜已冻结</h1></div>
+        {% endif %}
+
+        <!-- 去掉矩阵滚动容器，保留普通表格 -->
+        <table id="scoreboard" class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="5%" class="text-center"><b>排名</b></th>
+                    <th width="10%"><b>队伍</b></th>
+                    <th width="10%"><b>得分</b></th>
+                    <th width="10%"><b>解题数</b></th>
+                    <th width="15%"><b>最后解题时间</b></th>
+                    <!-- 删除题目列 -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in standings %}
+                    <tr>
+                        <td>{{ team.rank }}</td>
+                        <td><a href="{{ url_for('user_detail', user_id=team.teamid) }}">{{ team.name }}</a></td>
+                        <td>{{ team.score }}</td>
+                        <td>{{ team.solve_count }}</td>
+                        <td>{{ team.last_solve_time or '-' }}</td>
+                        <!-- 删除解题标记列 -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- 保留必要脚本，删除矩阵相关逻辑 -->
+<script src="{{ request.script_root }}/themes/{{ theme }}/static/js/utils.js"></script>
+<script src="{{ request.script_root }}/matrix/static/scoreboard-matrix.js"></script>
+{% endblock %}

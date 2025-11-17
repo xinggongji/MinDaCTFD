@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+	<div class="container">
+		<h1>注册</h1>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			{% include "components/errors.html" %}
+
+			{% if integrations.mlc() %}
+			<a class="btn btn-secondary btn-lg btn-block" href="{{ url_for('auth.oauth_login') }}">
+				Login with Major League Cyber
+			</a>
+
+			<hr>
+			{% endif %}
+
+			{% with form = Forms.auth.RegistrationForm() %}
+			{% from "macros/forms.html" import render_extra_fields %}
+			<form method="post" accept-charset="utf-8" autocomplete="off" role="form">
+				<div class="form-group">
+					<b>{{ form.name.label }}</b>
+					{{ form.name(class="form-control", value=name) }}
+					<small class="form-text text-muted">
+						您在网站上的用户名
+					</small>
+				</div>
+				<div class="form-group">
+					<b>{{ form.email.label }}</b>
+					{{ form.email(class="form-control", value=email) }}
+					<small class="form-text text-muted">
+						不会公开给其他用户
+					</small>
+				</div>
+				<!-- 添加真实姓名字段 -->
+				<div class="form-group">
+					<b>真实姓名</b>
+					<input class="form-control" 
+						   type="text" 
+						   name="real_name" 
+						   placeholder="请输入您的真实姓名"
+						   required>
+					<small class="form-text text-muted">
+						请填写真实姓名（与学籍信息一致）
+					</small>
+				</div>
+				<!-- 添加班级字段 -->
+				<div class="form-group">
+					<b>班级</b>
+					<input class="form-control" 
+						   type="text" 
+						   name="class_name" 
+						   placeholder="例如：计算机科学与技术2023级1班"
+						   required>
+					<small class="form-text text-muted">
+						请输入完整班级名称
+					</small>
+				</div>
+				<div class="form-group">
+					<b>{{ form.password.label }}</b>
+					{{ form.password(class="form-control", value=password) }}
+					<small class="form-text text-muted">
+						用于登录您的帐户的密码
+					</small>
+				</div>
+				{{ form.nonce() }}
+
+				{{ render_extra_fields(form.extra) }}
+
+				<div class="row pt-3">
+					<div class="col-md-12">
+						{{ form.submit(class="btn btn-md btn-primary btn-outlined float-right") }}
+					</div>
+				</div>
+
+				{% if Configs.tos_or_privacy %}
+				<div class="row pt-3">
+					<div class="col-md-12 text-center">
+						<small class="text-muted text-center">
+							如果注册，您需要同意
+							<a href="{{ Configs.privacy_link }}" rel="noopener" target="_blank">隐私政策</a>
+							和 <a href="{{ Configs.tos_link }}" rel="noopener" target="_blank">服务条款</a>
+						</small>
+					</div>
+				</div>
+				{% endif %}
+			</form>
+			{% endwith %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

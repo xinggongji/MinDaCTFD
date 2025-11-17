@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="pt-5 mt-5 text-center">
+				<h1>禁止访问</h1>  <!-- 汉化标题 -->
+				<hr class="w-50">
+				<h2>{{ error }}</h2>  <!-- 保留错误变量 -->
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{# 脚本块保持为空，保留原始结构 #}
+{% endblock %}
