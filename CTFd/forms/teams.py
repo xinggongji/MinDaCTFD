@@ -137,10 +137,8 @@ def TeamSettingsForm(*args, **kwargs):
             ),
         )
         affiliation = StringField(
-            _l("Affiliation"),
-            description=_l(
-                "Your team's affiliation publicly shown to other competitors"
-            ),
+            "学号",
+            description="公开显示给其他参赛者的学号"
         )
         website = URLField(
             _l("Website"),
@@ -200,7 +198,7 @@ class TeamSearchForm(BaseForm):
         choices=[
             ("name", "Name"),
             ("id", "ID"),
-            ("affiliation", "Affiliation"),
+            ("affiliation", "学号"),
             ("website", "Website"),
         ],
         default="name",
@@ -215,7 +213,7 @@ class PublicTeamSearchForm(BaseForm):
         _l("Search Field"),
         choices=[
             ("name", _l("Name")),
-            ("affiliation", _l("Affiliation")),
+            ("affiliation", "学号"),
             ("website", _l("Website")),
         ],
         default="name",
@@ -230,7 +228,7 @@ class TeamBaseForm(BaseForm):
     email = EmailField(_l("Email"))
     password = PasswordField(_l("Password"))
     website = URLField(_l("Website"))
-    affiliation = StringField(_l("Affiliation"))
+    affiliation = StringField("学号")
     country = SelectField(_l("Country"), choices=SELECT_COUNTRIES_LIST)
     hidden = BooleanField(_l("Hidden"))
     banned = BooleanField(_l("Banned"))

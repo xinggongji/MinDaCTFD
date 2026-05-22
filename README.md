@@ -89,25 +89,88 @@ docker restart min-da-ctfd_frpc_1
 #### 6. `docker network ls` 查看并复制标注内容`min-da-ctfd_frp_containers`到图2位置 
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235632.png)
 ![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235703.png)
-#### 7.  `systemctl status docker` 将标注目录中文件 **以管理员权限** 改写（其原内容为fd://）为图2所示 （端口号可以自拟 不冲突即可）
-![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-20%20235850.png)
+最后点击提交即可
 
-```
-sudo vim /lib/systemd/system/docker.service
-```
-![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20000146.png)
 
-```
-unix:///var/run/docker.sock -H tcp://192.168.147.132:2365
-```
-#### 8. 重启docker （可能稍慢需等待一会
+# CTF web 出题/上题文档
 
-```
-systemctl daemon-reload
+## 参考链接
+
+[如何用 docker 出一道 ctf 题 (web) | 枫霜月雨の blog](https://liuxin2020.github.io/2021/09/28/%E5%A6%82%E4%BD%95%E7%94%A8docker%E5%87%BA%E4%B8%80%E9%81%93ctf%E9%A2%98(web)/)
+
+[https://blog.csdn.net/Elite__zhb/article/details/134472115](https://blog.csdn.net/Elite__zhb/article/details/134472115)
+
+ctf出题模板地址：[https://github.com/CTF-Archives/ctf-docker-template](https://github.com/CTF-Archives/ctf-docker-template)
+
+## 出题指南
+
+CTFD平台在装载whale插件后可以实现动态flag。其原理是开启靶机后，系统从打包好的镜像加载容器，并且把随机的flag参数注入容器的`$FLAG`环境变量中。
+
+**php环境输出flag示例**
+
+```sql
+<?php
+echo "webtest";
+echo $_ENV['FLAG'];
+?>
 ```
 
+**python环境输出flag示例**
+
+```sql
+flag_value = os.getenv('FLAG')
+return flag_value
 ```
-systemctl restart docker
+
+还可以通过启动脚本把flag写入数据库、或者指定路径的文件中，详细请参考出题模板：
+
+[https://github.com/CTF-Archives/ctf-docker-template](https://github.com/CTF-Archives/ctf-docker-template)
+
+## 上题流程
+
+1、进入题目目录下，在Dockerfile同级目录下编译镜像
+
+```sql
+cd webtest
+#注意！在-t参数后还要空格加上一个点 . 表示在本目录下！！！
+docker build -t webtest:latest .
+#查看编译好的镜像
+docker images
 ```
-#### 9. 最后将api URL更换为环境机ip加端口
-![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202025-05-21%20000506.png)
+
+2、进入CTFD管理后台的Challenges页面，点击上方加号新建题目，选择**dynamic_docker**，填写好相关信息
+
+![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%87%BA%E9%A2%981.png)
+
+3、重点关注以下三个信息
+
+**Docker Image** 填入第 1 步docker build -t 参数 后自定义的镜像名字
+
+**Frp Redirect Type** 选择 Direct
+
+**Frp Redirect Port** 填入Dockerfile 暴露的对应端口，一般是80端口
+
+![输入图片说明](read%E5%9B%BE%E7%89%87/%E5%87%BA%E9%A2%982.png)
+
+填入好以上必要信息后即可创建web题目，完成出题流程
+
+## 常见问题汇总
+
+### 学校服务器无法build镜像？
+
+在本文档制作时，学校服务器由于不可抗力因素无法直接build镜像，可以现在自己的环境上将镜像构建好再打包过去。
+
+```sql
+#本地服务器
+cd webtest
+docker build -t webtest:latest .
+docker images
+docker save -o webtest.tar webtest:latest
+```
+
+利用ssh将打包好的tar包传到学校服务器上后，执行以下命令，即可在本地加载镜像
+
+```sql
+#学校服务器
+docker load -i webtest.tar
+```

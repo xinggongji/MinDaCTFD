@@ -9,69 +9,137 @@
 	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/main.css') }}">
 	<link rel="stylesheet" href="{{ url_for('views.themes', path='css/core.css') }}">
 	<style>
+		body {
+			background-image: url('{{ url_for('views.themes', path='img/bbj.png') }}');
+			background-size: cover;
+			background-attachment: fixed;
+			background-position: center;
+			background-repeat: no-repeat;
+		}
+	</style>
+	{% block stylesheets %}
+	{% if request.path == "/" or request.path == "" %}
+	<style>
 		#splash {
 			position: fixed !important;
 			top: 0 !important;
 			left: 0 !important;
-			width: 100% !important;
-			height: 100% !important;
-			background: black !important;
+			width: 100vw !important;
+			height: 100vh !important;
+			background: white !important;
 			z-index: 999999 !important;
-			text-align: center !important;
-			padding-top: 40vh !important;
-			margin: 0 !important;
-			border: none !important;
-			overflow: hidden !important;
-		}
-		#splash-text {
-			font-size: 60px !important;
-			color: red !important;
-			font-weight: bold !important;
-			animation: fadeIn 1s ease-in-out !important;
-			position: relative !important;
-			z-index: 10 !important;
-		}
-		/* 二进制特效样式 */
-		#binary-container {
-			position: absolute !important;
-			top: 0 !important;
-			left: 0 !important;
-			width: 100% !important;
-			height: 100% !important;
-			z-index: 5 !important;
-		}
-		.binary-stripe {
-			position: absolute !important;
 			display: flex !important;
-			flex-direction: column !important;
-			gap: 0.2px !important;
-		}
-		.binary-char {
-			color: #39ff14 !important;
-			font-family: "Courier New", monospace !important;
-			font-size: 15px !important;
-			font-weight: bolder !important;
-			text-shadow: 0 0 1px #39ff14 !important;
+			align-items: center !important;
+			justify-content: center !important;
 			margin: 0 !important;
 			padding: 0 !important;
+			overflow: hidden !important;
 		}
-		@keyframes fadeIn {
-			from { opacity: 0; }
-			to { opacity: 1; }
+		#splash.fade-out {
+			opacity: 0 !important;
+			transition: opacity 0.5s ease-out !important;
 		}
-		@keyframes fall {
-			0% { transform: translateY(var(--start-y, 0)); }
-			95% { opacity: 1; }
-			100% { transform: translateY(130vh); opacity: 0; }
+		/* 外层裁剪容器：彻底限制显示范围 */
+		.splash-clip-wrapper {
+			width: 100%;
+			max-width: 700px;
+			height: 160px;
+			overflow: hidden !important; /* 第一层裁剪 */
+			position: relative;
 		}
-		body {
-        background-image: url('{{ url_for('views.themes', path='img/bbj.png') }}');
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-        background-repeat: no-repeat;
-    	}
+		.splash-text-box {
+			width: 100%;
+			height: 100%;
+			text-align: center;
+			position: relative;
+			perspective: 1000px;
+			overflow: hidden !important; /* 第二层裁剪 */
+		}
+		#pre-text {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			backface-visibility: hidden;
+			transform-style: preserve-3d;
+			/* 限制内容范围，避免旋转时溢出 */
+			padding: 0 10px;
+			box-sizing: border-box;
+		}
+		#final-text {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transform: rotateX(180deg);
+			backface-visibility: hidden;
+			transform-style: preserve-3d;
+			padding: 0 10px;
+			box-sizing: border-box;
+		}
+		#line1, #line2 {
+			font-size: 60px !important;
+			color: black !important;
+			font-weight: bold !important;
+			white-space: nowrap;
+			margin: 8px 0 !important;
+			opacity: 0;
+			line-height: 1.2;
+			/* 文字自身不超出容器 */
+			max-width: 100%;
+			overflow: hidden;
+		}
+		#line1 { transform: translateX(-100%); }
+		#line2 { transform: translateX(100%); }
+		#final-text span {
+			font-size: 60px !important;
+			color: black !important;
+			font-weight: bold !important;
+			line-height: 1.2;
+			max-width: 100%;
+			overflow: hidden;
+		}
+		#splash.fade-out #final-text span {
+			opacity: 0 !important;
+			transform: scale(0.8) !important;
+			transition: opacity 0.5s ease-out, transform 0.5s ease-out !important;
+		}
+		/* 前两行动画 */
+		@keyframes leftIn { to { opacity: 1; transform: translateX(0); } }
+		@keyframes rightIn { to { opacity: 1; transform: translateX(0); } }
+		/* 翻页动画：限制旋转范围+强化隐藏 */
+		@keyframes pageFlip {
+			0% { 
+				transform: rotateX(0deg) scale(1); 
+				box-shadow: 0 0 0 rgba(0,0,0,0);
+				opacity: 1;
+			}
+			50% { 
+				transform: rotateX(-88deg) scale(0.98); /* 接近90度但留缓冲 */
+				box-shadow: 0 8px 15px rgba(0,0,0,0.15); /* 缩小阴影 */
+				opacity: 1;
+			}
+			100% { 
+				transform: rotateX(-180deg) scale(0.95); 
+				box-shadow: 0 0 0 rgba(0,0,0,0);
+				opacity: 0; /* 彻底透明 */
+			}
+		}
+		@keyframes finalFlip { 
+			to { 
+				opacity: 1; 
+				transform: rotateX(0deg); 
+			} 
+		}
 	</style>
+	{% endif %}
+	{% endblock %}
 
 	{{ Plugins.styles }}
 	<script type="text/javascript">
@@ -92,161 +160,90 @@
 	{{ Configs.theme_header }}
 </head>
 <body>
-	<!-- 开屏容器（确保二进制容器先于脚本加载） -->
+	{% if request.path == "/" or request.path == "" %}
 	<div id="splash">
-		<div id="binary-container"></div> <!-- 二进制容器优先渲染 -->
-		<div id="splash-text">我知道你为何而来</div>
+		<!-- 新增外层裁剪容器 -->
+		<div class="splash-clip-wrapper">
+			<div class="splash-text-box">
+				<div id="pre-text">
+					<div id="line1">厚德博学</div>
+					<div id="line2">和而不同</div>
+				</div>
+				<div id="final-text">
+					<span>欢迎来到</span>
+				</div>
+			</div>
+		</div>
 	</div>
+	{% endif %}
 
 	{% include "components/navbar.html" %}
 
 	<main role="main">
 		{% block content %}
-		<div id="main-content" style="display: none;">
-			{{ super() }}
-		</div>
 		{% endblock %}
 	</main>
 
 	<footer class="footer">
 		<div class="container text-center">
-			<a href="https://ctfd.io" class="text-secondary">
-				<small class="text-muted">Powered by CTFd</small>
-			</a>
+			<small class="text-muted">由人工智能攻坚团队维护</small>
 		</div>
 	</footer>
 
 	<script defer src="{{ url_for('views.themes', path='js/vendor.bundle.js') }}"></script>
 	<script defer src="{{ url_for('views.themes', path='js/core.js') }}"></script>
 	<script defer src="{{ url_for('views.themes', path='js/helpers.js') }}"></script>
+
 	{% block entrypoint %}
 	<script defer src="{{ url_for('views.themes', path='js/pages/main.js') }}"></script>
 	{% endblock %}
 
-	<!-- 二进制特效逻辑（确保容器存在再执行） -->
-	<script>
-		// 等待二进制容器加载完成后再初始化
-		function initBinaryAnimation() {
-			// 重试机制：确保容器存在（最多重试5次，间隔100ms）
-			let retryCount = 0;
-			const maxRetries = 5;
-			
-			function tryInit() {
-				const container = document.getElementById('binary-container');
-				if (container) {
-					// 容器存在，执行二进制特效
-					const screenWidth = window.innerWidth;
-					const generateMinY = -250;
-					const generateMaxY = -50;
-					let stripeId = 0;
-
-					function createSingleStripe() {
-						const stripe = document.createElement('div');
-						stripe.className = 'binary-stripe';
-						stripe.id = `stripe-${stripeId++}`;
-
-						const charCount = 10 + Math.floor(Math.random() * 13);
-						for (let j = 0; j < charCount; j++) {
-							const char = document.createElement('span');
-							char.className = 'binary-char';
-							char.textContent = Math.random() > 0.5 ? '1' : '0';
-							stripe.appendChild(char);
-						}
-
-						const left = Math.random() * screenWidth;
-						stripe.style.left = `${left}px`;
-
-						const startY = generateMinY + Math.random() * (generateMaxY - generateMinY);
-						stripe.style.transform = `translateY(${startY}px)`;
-
-						const duration = 2 + Math.random() * 1;
-						stripe.style.animation = `fall ${duration}s linear forwards`;
-
-						container.appendChild(stripe);
-
-						setTimeout(() => {
-							const el = document.getElementById(stripe.id);
-							if (el) el.remove();
-						}, duration * 1000);
-					}
-
-					// 启动二进制雨
-					for (let i = 0; i < 30; i++) {
-						setTimeout(createSingleStripe, i * 20);
-					}
-					setTimeout(() => {
-						const interval = setInterval(createSingleStripe, 40);
-						setTimeout(() => clearInterval(interval), 2500);
-					}, 500);
-				} else if (retryCount < maxRetries) {
-					// 容器未加载，重试
-					retryCount++;
-					setTimeout(tryInit, 100);
-				} else {
-					console.error('二进制容器加载失败，无法显示特效');
-				}
-			}
-
-			tryInit(); // 立即尝试初始化
-		}
-	</script>
-
-	<!-- 开屏控制逻辑（确保100%关闭开屏） -->
+	{% block scripts %}
+	{% if request.path == "/" or request.path == "" %}
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
+			const splashShown = sessionStorage.getItem('splashShown');
 			const splash = document.getElementById('splash');
-			const mainContent = document.getElementById('main-content');
-			const currentPath = window.location.pathname;
-			let splashShown = sessionStorage.getItem('splashShown');
+			if (!splash) return;
 
-			// 防御性判断：开屏元素不存在直接显示主内容
-			if (!splash) {
-				if (mainContent) mainContent.style.display = 'block';
-				return;
-			}
+			const line1 = document.getElementById('line1');
+			const line2 = document.getElementById('line2');
+			const preText = document.getElementById('pre-text');
+			const finalText = document.getElementById('final-text');
 
-			// 首页首次加载
-			if ((currentPath === "/" || currentPath === "") && !splashShown) {
-				// 立即启动二进制特效（带重试机制）
-				initBinaryAnimation();
+			if (!splashShown) {
+				// 前两行动画
+				setTimeout(() => { 
+					line1.style.animation = 'leftIn 0.75s forwards';
+				}, 500);
 
-				// 3秒后强制关闭开屏（双重保障）
-				const closeSplash = function() {
-					// 1. 先显示主内容
-					if (mainContent) mainContent.style.display = 'block';
-					// 2. 移除开屏元素（优先）
-					if (splash.parentNode) {
-						splash.parentNode.removeChild(splash); // 兼容所有浏览器的移除方式
-					} else {
-						splash.remove(); // 备选方案
-					}
-					// 3. 标记为已显示
-					sessionStorage.setItem('splashShown', 'true');
-					// 4. 超时保护：确保开屏被隐藏（极端情况）
-					splash.style.display = 'none';
-				};
+				setTimeout(() => { 
+					line2.style.animation = 'rightIn 0.75s forwards';
+				}, 1250);
 
-				// 主定时器：3秒后关闭
-				setTimeout(closeSplash, 3000);
-				// 冗余定时器：4秒后再次检查（防止主定时器失效）
-				setTimeout(function() {
-					if (document.getElementById('splash')) {
-						closeSplash();
-					}
-				}, 4000);
+				// 翻页动画
+				setTimeout(() => {
+					preText.style.animation = 'pageFlip 1.2s forwards';
+					finalText.style.animation = 'finalFlip 1.2s forwards 0.3s';
+				}, 2000);
 
-			} else {
-				// 非首页或已显示：立即关闭
-				if (mainContent) mainContent.style.display = 'block';
-				if (splash.parentNode) {
-					splash.parentNode.removeChild(splash);
-				} else {
+				// 同步消失
+				setTimeout(() => {
+					splash.classList.add('fade-out');
+				}, 3500);
+
+				// 移除开屏
+				setTimeout(() => {
 					splash.remove();
-				}
-				splash.style.display = 'none'; // 极端情况保障
+					sessionStorage.setItem('splashShown', 'true');
+				}, 4000);
+			} else {
+				splash.remove();
 			}
 		});
 	</script>
+	{% endif %}
+	{% endblock %}
 
 	{{ Plugins.scripts }}
 	{{ Configs.theme_footer }}

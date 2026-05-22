@@ -140,20 +140,20 @@ def attach_user_bracket_field(form_cls):
 
 class UserSearchForm(BaseForm):
     field = SelectField(
-        "Search Field",
+        "搜索字段",
         choices=[
-            ("name", "Name"),
+            ("name", "用户名"),
             ("id", "ID"),
-            ("email", "Email"),
-            ("affiliation", "Affiliation"),
-            ("website", "Website"),
-            ("ip", "IP Address"),
+            ("email", "邮箱"),
+            ("affiliation", "学号"),
+            ("website", "网站"),
+            ("ip", "IP 地址"),
         ],
         default="name",
         validators=[InputRequired()],
     )
-    q = StringField("Parameter", validators=[InputRequired()])
-    submit = SubmitField("Search")
+    q = StringField("关键词", validators=[InputRequired()])
+    submit = SubmitField("搜索")
 
 
 class PublicUserSearchForm(BaseForm):
@@ -161,7 +161,7 @@ class PublicUserSearchForm(BaseForm):
         _l("Search Field"),
         choices=[
             ("name", _l("Name")),
-            ("affiliation", _l("Affiliation")),
+            ("affiliation", "学号"),
             ("website", _l("Website")),
         ],
         default="name",
@@ -176,18 +176,20 @@ class PublicUserSearchForm(BaseForm):
 
 
 class UserBaseForm(BaseForm):
-    name = StringField("User Name", validators=[InputRequired()])
-    email = EmailField("Email", validators=[InputRequired()])
+    name = StringField("用户名", validators=[InputRequired()])
+    email = EmailField("邮箱", validators=[InputRequired()])
     language = SelectField(_l("Language"), choices=SELECT_LANGUAGE_LIST)
-    password = PasswordField("Password")
-    website = StringField("Website")
-    affiliation = StringField("Affiliation")
-    country = SelectField("Country", choices=SELECT_COUNTRIES_LIST)
-    type = SelectField("Type", choices=[("user", "User"), ("admin", "Admin")])
-    verified = BooleanField("Verified")
-    hidden = BooleanField("Hidden")
-    banned = BooleanField("Banned")
-    submit = SubmitField("Submit")
+    password = PasswordField("密码")
+    realname = StringField("真实姓名")
+    classname = StringField("班级")
+    website = StringField("网站")
+    affiliation = StringField("学号")
+    country = SelectField("国家/地区", choices=SELECT_COUNTRIES_LIST)
+    type = SelectField("类型", choices=[("user", "用户"), ("admin", "管理员")])
+    verified = BooleanField("已验证")
+    hidden = BooleanField("隐藏")
+    banned = BooleanField("封禁")
+    submit = SubmitField("提交")
 
 
 def UserEditForm(*args, **kwargs):
@@ -220,7 +222,7 @@ def UserEditForm(*args, **kwargs):
 
 def UserCreateForm(*args, **kwargs):
     class _UserCreateForm(UserBaseForm):
-        notify = BooleanField("Email account credentials to user", default=True)
+        notify = BooleanField("发送账号凭证邮件给用户", default=True)
 
         @property
         def extra(self):

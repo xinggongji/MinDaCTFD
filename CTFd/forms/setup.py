@@ -26,138 +26,117 @@ from CTFd.utils.config import get_themes
 
 class SetupForm(BaseForm):
     ctf_name = StringField(
-        _l("Event Name"), description=_l("The name of your CTF event/workshop")
+        "赛事名称", description="您的 CTF 赛事/活动的名称"
     )
     ctf_description = TextAreaField(
-        _l("Event Description"), description=_l("Description for the CTF")
+        "赛事描述", description="CTF 赛事的描述"
     )
     user_mode = RadioField(
-        _l("User Mode"),
-        choices=[("teams", _l("Team Mode")), ("users", _l("User Mode"))],
+        "用户模式",
+        choices=[("teams", "团队模式"), ("users", "个人模式")],
         default="teams",
-        description=_l(
-            "Controls whether users join together in teams to play (Team Mode) or play as themselves (User Mode)"
-        ),
+        description="选择参赛者是以团队形式（团队模式）还是个人形式（个人模式）参与比赛",
         validators=[InputRequired()],
     )
 
     name = StringField(
-        _l("Admin Username"),
-        description=_l("Your username for the administration account"),
+        "管理员用户名",
+        description="管理员账户的用户名",
         validators=[InputRequired()],
     )
     email = EmailField(
-        _l("Admin Email"),
-        description=_l("Your email address for the administration account"),
+        "管理员邮箱",
+        description="管理员账户的邮箱地址",
         validators=[InputRequired()],
     )
     password = PasswordField(
-        _l("Admin Password"),
-        description=_l("Your password for the administration account"),
-        validators=[InputRequired()],
-    )
-    # 添加真实姓名字段
-    realname = StringField(
-        _l("Real Name"),
-        description=_l("Your real name for the administration account"),
-        validators=[InputRequired()],
-    )
-    
-    # 添加班级字段
-    classname = StringField(
-        _l("Class"),
-        description=_l("Your class for the administration account"),
+        "管理员密码",
+        description="管理员账户的密码",
         validators=[InputRequired()],
     )
 
     ctf_logo = FileField(
-        _l("Logo"),
-        description=_l(
-            "Logo to use for the website instead of a CTF name. Used as the home page button. Optional."
-        ),
+        "Logo 图标",
+        description="网站 Logo，用于替代赛事名称显示在首页按钮位置。可选。",
     )
     ctf_banner = FileField(
-        _l("Banner"), description=_l("Banner to use for the homepage. Optional.")
+        "横幅", description="首页横幅图片。可选。"
     )
     ctf_small_icon = FileField(
-        _l("Small Icon"),
-        description=_l(
-            "favicon used in user's browsers. Only PNGs accepted. Must be 32x32px. Optional."
-        ),
+        "小图标",
+        description="浏览器标签页图标 favicon。仅支持 PNG 格式，需 32x32 像素。可选。",
     )
     ctf_theme = SelectField(
-        _l("Theme"),
-        description=_l("CTFd Theme to use. Can be changed later."),
+        "主题",
+        description="CTFd 使用的主题，可后期更改。",
         choices=list(zip(get_themes(), get_themes())),
         ## TODO: Replace back to DEFAULT_THEME (aka core) in CTFd 4.0
         default="core-beta",
         validators=[InputRequired()],
     )
     theme_color = HiddenField(
-        _l("Theme Color"),
-        description=_l(
-            "Color used by theme to control aesthetics. Requires theme support. Optional."
-        ),
+        "主题颜色",
+        description="主题使用的颜色，控制外观风格。需要主题支持。可选。",
     )
 
     verify_emails = SelectField(
-        _l("Verify Emails"),
-        description="Control whether users must confirm their email addresses before participating",
-        choices=[("true", "Enabled"), ("false", "Disabled")],
+        "验证邮箱",
+        description="控制用户是否必须确认邮箱地址才能参赛",
+        choices=[("true", "启用"), ("false", "禁用")],
         default="false",
     )
     team_size = IntegerField(
         widget=NumberInput(min=0),
-        description="Amount of users per team (Teams mode only) Optional.",
+        description="每个团队的用户数量（仅团队模式）。可选。",
     )
     challenge_visibility = SelectField(
-        "Challenge Visibility",
-        description="Control whether users must be logged in to see challenges",
+        "题目可见性",
+        description="控制用户是否需要登录才能查看题目",
         choices=[
-            (ChallengeVisibilityTypes.PUBLIC, "Public"),
-            (ChallengeVisibilityTypes.PRIVATE, "Private"),
-            (ChallengeVisibilityTypes.ADMINS, "Admins Only"),
+            (ChallengeVisibilityTypes.PUBLIC, "公开"),
+            (ChallengeVisibilityTypes.PRIVATE, "仅登录"),
+            (ChallengeVisibilityTypes.ADMINS, "仅管理员"),
         ],
         default=ChallengeVisibilityTypes.PRIVATE,
     )
     account_visibility = SelectField(
-        "Account Visibility",
-        description="Control whether accounts (users & teams) are shown to everyone, only to authenticated users, or only to admins",
+        "账户可见性",
+        description="控制账户（用户和团队）对所有人、仅认证用户、或仅管理员可见",
         choices=[
-            (AccountVisibilityTypes.PUBLIC, "Public"),
-            (AccountVisibilityTypes.PRIVATE, "Private"),
-            (AccountVisibilityTypes.ADMINS, "Admins Only"),
+            (AccountVisibilityTypes.PUBLIC, "公开"),
+            (AccountVisibilityTypes.PRIVATE, "仅登录"),
+            (AccountVisibilityTypes.ADMINS, "仅管理员"),
         ],
         default=AccountVisibilityTypes.PUBLIC,
     )
     score_visibility = SelectField(
-        "Score Visibility",
-        description="Control whether solves/score are shown to the public, to logged in users, hidden to all non-admins, or only shown to admins",
+        "分数可见性",
+        description="控制解题/分数对公开、登录用户、非管理员隐藏、或仅管理员可见",
         choices=[
-            (ScoreVisibilityTypes.PUBLIC, "Public"),
-            (ScoreVisibilityTypes.PRIVATE, "Private"),
-            (ScoreVisibilityTypes.HIDDEN, "Hidden"),
-            (ScoreVisibilityTypes.ADMINS, "Admins Only"),
+            (ScoreVisibilityTypes.PUBLIC, "公开"),
+            (ScoreVisibilityTypes.PRIVATE, "仅登录"),
+            (ScoreVisibilityTypes.HIDDEN, "隐藏"),
+            (ScoreVisibilityTypes.ADMINS, "仅管理员"),
         ],
         default=AccountVisibilityTypes.PUBLIC,
     )
     registration_visibility = SelectField(
-        "Registration Visibility",
-        description="Control whether registration is enabled for everyone or disabled",
+        "注册可见性",
+        description="控制注册是否对所有人开放或已关闭",
         choices=[
-            (RegistrationVisibilityTypes.PUBLIC, "Public"),
-            (RegistrationVisibilityTypes.PRIVATE, "Private"),
-            (RegistrationVisibilityTypes.MLC, "MajorLeagueCyber Only"),
+            (RegistrationVisibilityTypes.PUBLIC, "公开"),
+            (RegistrationVisibilityTypes.PRIVATE, "关闭"),
+            (RegistrationVisibilityTypes.MLC, "仅 MajorLeagueCyber"),
         ],
         default=RegistrationVisibilityTypes.PUBLIC,
     )
 
     start = StringField(
-        _l("Start Time"),
-        description=_l("Time when your CTF is scheduled to start. Optional."),
+        "开始时间",
+        description="CTF 计划开始的时间。可选。",
     )
     end = StringField(
-        _l("End Time"),
+        "结束时间",
         description=_l("Time when your CTF is scheduled to end. Optional."),
     )
     submit = SubmitField(_l("Finish"))

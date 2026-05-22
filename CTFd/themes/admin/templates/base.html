@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Admin Panel</title>
+	<title>管理面板</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="shortcut icon" href="{{ url_for('views.themes', theme='admin', path='img/favicon.ico') }}" type="image/x-icon">
@@ -47,13 +47,13 @@
 			</button>
 			<div class="collapse navbar-collapse" id="base-navbars">
 				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.statistics') }}">用户统计</a></li>
+					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.statistics') }}">统计</a></li>
 					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.notifications') }}">通知</a>
 					</li>
 					<li class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">页面</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="{{ url_for('admin.pages_listing') }}">全部页面</a>
+							<a class="dropdown-item" href="{{ url_for('admin.pages_listing') }}">所有页面</a>
 							<a class="dropdown-item" href="{{ url_for('admin.pages_new') }}">新建页面</a>
 						</div>
 					</li>
@@ -65,7 +65,7 @@
 					<li class="nav-item"><a class="nav-link" href="{{ url_for('admin.challenges_listing') }}">题目</a></li>
 					<li class="nav-item dropdown">
 						<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-						   aria-haspopup="true" aria-expanded="true">flag提交统计</a>
+						   aria-haspopup="true" aria-expanded="true">提交</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing') }}">全部提交</a>
 							<a class="dropdown-item" href="{{ url_for('admin.submissions_listing', submission_type='correct') }}">正确提交</a>

@@ -1,4 +1,3 @@
-from flask_babel import lazy_gettext as _l
 from wtforms import PasswordField, StringField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import InputRequired
@@ -18,15 +17,14 @@ from CTFd.forms.users import (
 def RegistrationForm(*args, **kwargs):
     class _RegistrationForm(BaseForm):
         name = StringField(
-            _l("User Name"), validators=[InputRequired()], render_kw={"autofocus": True}
+            "用户名", validators=[InputRequired()], render_kw={"autofocus": True}
         )
-        email = EmailField(_l("Email"), validators=[InputRequired()])
-        password = PasswordField(_l("Password"), validators=[InputRequired()])
-        # 添加姓名班级
-        realname = StringField(_l("Real Name"), validators=[InputRequired()])
-        classname = StringField(_l("Class"), validators=[InputRequired()])
-        submit = SubmitField(_l("Submit"))
-        
+        email = EmailField("邮箱", validators=[InputRequired()])
+        password = PasswordField("密码", validators=[InputRequired()])
+        realname = StringField("真实姓名", validators=[InputRequired()])
+        classname = StringField("班级", validators=[InputRequired()])
+        submit = SubmitField("注册")
+
         @property
         def extra(self):
             return (
@@ -46,27 +44,27 @@ def RegistrationForm(*args, **kwargs):
 
 class LoginForm(BaseForm):
     name = StringField(
-        _l("User Name or Email"),
+        "用户名/邮箱",
         validators=[InputRequired()],
         render_kw={"autofocus": True},
     )
-    password = PasswordField(_l("Password"), validators=[InputRequired()])
-    submit = SubmitField(_l("Submit"))
+    password = PasswordField("密码", validators=[InputRequired()])
+    submit = SubmitField("登录")
 
 
 class ConfirmForm(BaseForm):
-    submit = SubmitField(_l("Resend Confirmation Email"))
+    submit = SubmitField("重新发送确认邮件")
 
 
 class ResetPasswordRequestForm(BaseForm):
     email = EmailField(
-        _l("Email"), validators=[InputRequired()], render_kw={"autofocus": True}
+        "邮箱", validators=[InputRequired()], render_kw={"autofocus": True}
     )
-    submit = SubmitField(_l("Submit"))
+    submit = SubmitField("提交")
 
 
 class ResetPasswordForm(BaseForm):
     password = PasswordField(
-        _l("Password"), validators=[InputRequired()], render_kw={"autofocus": True}
+        "密码", validators=[InputRequired()], render_kw={"autofocus": True}
     )
-    submit = SubmitField(_l("Submit"))
+    submit = SubmitField("提交")

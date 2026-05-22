@@ -4,6 +4,7 @@ import uuid
 from collections import OrderedDict
 
 import docker
+from docker import types as docker_types
 from flask import current_app
 
 from CTFd.utils import get_config
@@ -13,6 +14,7 @@ from .exceptions import WhaleError
 
 
 def get_docker_client():
+    base_url = get_config("whale:docker_api_url") or "unix:///var/run/docker.sock"
     if get_config("whale:docker_use_ssl", False):
         tls_config = docker.tls.TLSConfig(
             verify=True,
@@ -23,11 +25,11 @@ def get_docker_client():
             ),
         )
         return docker.DockerClient(
-            base_url=get_config("whale:docker_api_url"),
+            base_url=base_url,
             tls=tls_config,
+            timeout=300,
         )
-    else:
-        return docker.DockerClient(base_url=get_config("whale:docker_api_url"))
+    return docker.DockerClient(base_url=base_url, timeout=300)
 
 
 class DockerUtils:
@@ -35,7 +37,6 @@ class DockerUtils:
     def init():
         try:
             DockerUtils.client = get_docker_client()
-            # docker-py is thread safe: https://github.com/docker/docker-py/issues/619
         except Exception:
             raise WhaleError(
                 'Docker Connection Error\n'
@@ -67,26 +68,29 @@ class DockerUtils:
         client.services.create(
             image=container.challenge.docker_image,
             name=f'{container.user_id}-{container.uuid}',
-            env={'FLAG': container.flag}, dns_config=docker.types.DNSConfig(nameservers=dns),
+            environment={'FLAG': container.flag},
+            dns_config=docker_types.DNSConfig(nameservers=dns),
             networks=[get_config("whale:docker_auto_connect_network", "ctfd_frp-containers")],
-            resources=docker.types.Resources(
+            resources=docker_types.Resources(
                 mem_limit=DockerUtils.convert_readable_text(
                     container.challenge.memory_limit),
-                cpu_limit=int(container.challenge.cpu_limit * 1e9)
+                cpu_limit=int(container.challenge.cpu_limit * 100000)
             ),
             labels={
                 'whale_id': f'{container.user_id}-{container.uuid}'
-            },  # for container deletion
-            constraints=['node.labels.name==' + node],
-            endpoint_spec=docker.types.EndpointSpec(mode='dnsrr', ports={})
+            },
+            placement=docker_types.Placement(
+                constraints=['node.labels.name==' + node]
+            ),
+            endpoint_spec=docker_types.EndpointSpec(mode='dnsrr', ports={})
         )
 
     @staticmethod
     def _create_grouped_container(client, container):
         range_prefix = CacheProvider(app=current_app).get_available_network_range()
 
-        ipam_pool = docker.types.IPAMPool(subnet=range_prefix)
-        ipam_config = docker.types.IPAMConfig(
+        ipam_pool = docker_types.IPAMPool(subnet=range_prefix)
+        ipam_config = docker_types.IPAMConfig(
             driver='default', pool_configs=[ipam_pool])
         network_name = f'{container.user_id}-{container.uuid}'
         network = client.networks.create(
@@ -128,20 +132,23 @@ class DockerUtils:
                 has_processed_main = True
             client.services.create(
                 image=image, name=container_name, networks=[
-                    docker.types.NetworkAttachmentConfig(network_name, aliases=[name])
+                    docker_types.NetworkAttachmentConfig(network_name, aliases=[name])
                 ],
-                env={'FLAG': container.flag},
-                dns_config=docker.types.DNSConfig(nameservers=dns),
-                resources=docker.types.Resources(
+                environment={'FLAG': container.flag},
+                dns_config=docker_types.DNSConfig(nameservers=dns),
+                resources=docker_types.Resources(
                     mem_limit=DockerUtils.convert_readable_text(
                         container.challenge.memory_limit
                     ),
-                    cpu_limit=int(container.challenge.cpu_limit * 1e9)),
+                    cpu_limit=int(container.challenge.cpu_limit * 100000)),
                 labels={
                     'whale_id': f'{container.user_id}-{container.uuid}'
-                },  # for container deletion
-                hostname=name, constraints=['node.labels.name==' + node],
-                endpoint_spec=docker.types.EndpointSpec(mode='dnsrr', ports={})
+                },
+                hostname=name,
+                placement=docker_types.Placement(
+                    constraints=['node.labels.name==' + node]
+                ),
+                endpoint_spec=docker_types.EndpointSpec(mode='dnsrr', ports={})
             )
 
     @staticmethod
@@ -152,7 +159,7 @@ class DockerUtils:
             s.remove()
 
         networks = DockerUtils.client.networks.list(names=[whale_id])
-        if len(networks) > 0:  # is grouped containers
+        if len(networks) > 0:
             auto_containers = get_config("whale:docker_auto_connect_containers", "").split(",")
             redis_util = CacheProvider(app=current_app)
             for network in networks:

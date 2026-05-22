@@ -8,7 +8,7 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h2 class="modal-action text-center w-100">Edit Team</h2>
+					<h2 class="modal-action text-center w-100">编辑团队</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -79,7 +79,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h2 class="modal-action text-center w-100">Choose Captain</h2>
+					<h2 class="modal-action text-center w-100">选择队长</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -109,7 +109,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h2 class="modal-action text-center w-100">Invite Users</h2>
+					<h2 class="modal-action text-center w-100">邀请用户</h2>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -128,10 +128,10 @@
 								</div>
 							</div>
 							<small class="form-text text-muted">
-								Share this link with your team members for them to join your team
+								将此链接分享给团队成员以加入团队
 							</small>
 							<small class="form-text text-muted">
-								Invite links can be re-used and expire after 1 day
+								邀请链接可重复使用，有效期1天
 							</small>
 						</div>
 					</form>
@@ -146,7 +146,7 @@
 			<h1 id="team-id" team-id="{{ team.id }}">{{ team.name }}</h1>
 			{% if team.oauth_id %}
 				<a href="https://majorleaguecyber.org/t/{{ team.name }}">
-					<h3><span class="badge badge-primary">Official</span></h3>
+					<h3><span class="badge badge-primary">认证</span></h3>
 				</a>
 			{% endif %}
 			{% if team.affiliation %}
@@ -174,14 +174,14 @@
 				{% if scores_visible() %}
 					{% if place %}
 						{{ place }}
-						<small>place</small>
+						<small>名</small>
 					{% endif %}
 				{% endif %}
 			</h2>
 			<h2 id="team-score" class="text-center">
 				{% if score %}
 					{{ score }}
-					<small>points</small>
+					<small>分</small>
 				{% endif %}
 			</h2>
 			<div class="pt-3">
@@ -190,43 +190,43 @@
 						<i class="btn-fa fas fa-cogs fa-2x px-2"
 						   data-toggle="tooltip"
 						   data-placement="top"
-						   title="Edit Team"></i>
+						   title="编辑团队"></i>
 
 						<a class="edit-captain">
 							<i class="btn-fa fas fa-user-tag fa-2x px-2" data-toggle="tooltip" data-placement="top"
-							   title="Choose Captain"></i>
+							   title="选择队长"></i>
 						</a>
 
 						<a class="invite-members">
 							<i class="btn-fa fas fa-ticket-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
-							   title="Invite Users"></i>
+							   title="邀请用户"></i>
 						</a>
 						<a class="disband-team">
 							<i class="btn-fa fas fa-trash-alt fa-2x px-2" data-toggle="tooltip" data-placement="top"
-								title="Disband Team"></i>
+								title="解散团队"></i>
 						</a>
 					{% else %}
 						<i class="btn-fa fas fa-cogs fa-2x px-2 fa-disabled"
 						   data-toggle="tooltip"
 						   data-placement="top"
-						   title="Only team captains can edit team information"></i>
+						   title="仅队长可编辑团队信息"></i>
 						<a class="edit-captain">
 							<i class="btn-fa fas fa-user-tag fa-2x px-2 fa-disabled"
 							   data-toggle="tooltip"
 							   data-placement="top"
-							   title="Only team captains can choose a new captain"></i>
+							   title="仅队长可选择新队长"></i>
 						</a>
 						<a class="invite-members">
 							<i class="btn-fa fas fa-ticket-alt fa-2x px-2"
 								data-toggle="tooltip"
 								data-placement="top"
-								title="Only team captains can generate invite links"></i>
+								title="仅队长可生成邀请链接"></i>
 						</a>
 						<a class="disband-team">
 							<i class="btn-fa fas fa-trash-alt fa-2x px-2 fa-disabled"
 								data-toggle="tooltip"
 								data-placement="top"
-								title="Only team captains can disband the team"></i>
+								title="仅队长可解散团队"></i>
 						</a>
 					{% endif %}
 				</a>
@@ -246,12 +246,12 @@
 
 		<div class="row min-vh-25">
 			<div class="col-md-12">
-				<h3>Members</h3>
+				<h3>成员</h3>
 				<table class="table table-striped">
 					<thead>
 					<tr>
-						<td><b>User Name</b></td>
-						<td><b>Score</b></td>
+						<td><b>用户名</b></td>
+						<td><b>得分</b></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -262,7 +262,7 @@
 									{{ member.name }}
 								</a>
 								{% if team.captain_id == member.id %}
-									<span class="badge badge-primary ml-2">Captain</span>
+									<span class="badge badge-primary ml-2">队长</span>
 								{% endif %}
 							</td>
 							<td>{{ member.score }}</td>
@@ -304,7 +304,7 @@
 			{% if awards %}
 				<div class="row">
 					<div class="col-md-12">
-						<h3>Awards</h3>
+						<h3>奖励</h3>
 					</div>
 					{% for award in awards %}
 						<div class="col-md-3 col-sm-6">
@@ -325,14 +325,14 @@
 
 			<div class="row">
 				<div class="col-md-12">
-					<h3>Solves</h3>
+					<h3>已解题目</h3>
 					<table class="table table-striped">
 						<thead>
 						<tr>
-							<td><b>Challenge</b></td>
-							<td class="d-none d-md-block d-lg-block"><b>Category</b></td>
-							<td><b>Value</b></td>
-							<td><b>Time</b></td>
+							<td><b>题目</b></td>
+							<td class="d-none d-md-block d-lg-block"><b>分类</b></td>
+							<td><b>分值</b></td>
+							<td><b>时间</b></td>
 						</tr>
 						</thead>
 						<tbody>
@@ -357,7 +357,7 @@
 		{% else %}
 			<div class="row min-vh-25">
 				<h3 class="opacity-50 text-center w-100 justify-content-center align-self-center">
-					No solves yet
+					暂无解题记录
 				</h3>
 			</div>
 		{% endif %}

@@ -8,9 +8,9 @@
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>题目
+		<h1>题目管理
 			<a class="no-decoration" href="{{ url_for('admin.challenges_new') }}">
-				<span role="button" data-toggle="tooltip" title="Create Challenge">
+				<span role="button" data-toggle="tooltip" title="新建题目">
 					<i class="btn-fa fas fa-plus-circle"></i>
 				</span>
 			</a>
@@ -22,10 +22,10 @@
 		<div class="col-md-12">
 			{% if q and field %}
 			<h5 class="text-muted text-center">
-				Searching for challenges with <strong>{{ field }}</strong> matching <strong>{{ q }}</strong>
+				搜索条件：<strong>{{ field }}</strong> 包含 <strong>{{ q }}</strong>
 			</h5>
 			<h6 class="text-muted text-center pb-3">
-				{{ total }} results
+				{{ total }} 条结果
 			</h6>
 			{% endif %}
 
@@ -35,7 +35,7 @@
 					{{ form.field(class="form-control custom-select w-100") }}
 				</div>
 				<div class="form-group col-md-8">
-					{{ form.q(class="form-control w-100", placeholder="Search for matching challenge") }}
+					{{ form.q(class="form-control w-100", placeholder="搜索题目...") }}
 				</div>
 				<div class="form-group col-md-2">
 					<button type="submit" class="btn btn-primary w-100">
@@ -53,10 +53,10 @@
 		<div class="col-md-12">
 			<div class="float-right pb-3">
 				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="Edit Challenges" id="challenges-edit-button">
+					<button type="button" class="btn btn-outline-secondary" data-toggle="tooltip" title="编辑选中题目" id="challenges-edit-button">
 						<i class="btn-fa fas fa-pencil-alt"></i>
 					</button>
-					<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Challenges" id="challenges-delete-button">
+					<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="删除选中题目" id="challenges-delete-button">
 						<i class="btn-fa fas fa-trash-alt"></i>
 					</button>
 				</div>
@@ -98,7 +98,8 @@
 							<td class="text-center">{{ challenge.type }}</td>
 							<td class="text-center">
 								{% set badge_state = 'badge-danger' if challenge.state == 'hidden' else 'badge-success' %}
-								<span class="badge {{ badge_state }}">{{ challenge.state }}</span>
+								{% set state_text = '隐藏' if challenge.state == 'hidden' else '可见' %}
+								<span class="badge {{ badge_state }}">{{ state_text }}</span>
 							</td>
 						</tr>
 					{% endfor %}

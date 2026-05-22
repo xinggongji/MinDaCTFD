@@ -6,7 +6,7 @@
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>Register</h1>
+		<h1>注册</h1>
 	</div>
 </div>
 <div class="container">
@@ -16,7 +16,7 @@
 
 			{% if integrations.mlc() %}
 			<a class="btn btn-secondary btn-lg btn-block" href="{{ url_for('auth.oauth_login') }}">
-				Login with Major League Cyber
+				通过 Major League Cyber 登录
 			</a>
 
 			<hr>
@@ -29,21 +29,35 @@
 					<b>{{ form.name.label }}</b>
 					{{ form.name(class="form-control", value=name) }}
 					<small class="form-text text-muted">
-						Your username on the site
+						您在平台上的用户名
 					</small>
 				</div>
 				<div class="form-group">
 					<b>{{ form.email.label }}</b>
 					{{ form.email(class="form-control", value=email) }}
 					<small class="form-text text-muted">
-						Never shown to the public
+						不会对外公开
 					</small>
 				</div>
 				<div class="form-group">
 					<b>{{ form.password.label }}</b>
 					{{ form.password(class="form-control", value=password) }}
 					<small class="form-text text-muted">
-						Password used to log into your account
+						用于登录的密码
+					</small>
+				</div>
+				<div class="form-group">
+					<b>{{ form.realname.label }}</b>
+					{{ form.realname(class="form-control", value=realname) }}
+					<small class="form-text text-muted">
+						请输入您的真实姓名
+					</small>
+				</div>
+				<div class="form-group">
+					<b>{{ form.classname.label }}</b>
+					{{ form.classname(class="form-control", value=classname) }}
+					<small class="form-text text-muted">
+						请输入您的班级
 					</small>
 				</div>
 				{{ form.nonce() }}
@@ -60,9 +74,9 @@
 				<div class="row pt-3">
 					<div class="col-md-12 text-center">
 						<small class="text-muted text-center">
-							By registering, you agree to the
-							<a href="{{ Configs.privacy_link }}" rel="noopener" target="_blank">privacy policy</a>
-							and <a href="{{ Configs.tos_link }}" rel="noopener" target="_blank">terms of service</a>
+							注册即表示您同意
+							<a href="{{ Configs.privacy_link }}" rel="noopener" target="_blank">隐私政策</a>
+							和 <a href="{{ Configs.tos_link }}" rel="noopener" target="_blank">服务条款</a>
 						</small>
 					</div>
 				</div>

@@ -23,7 +23,7 @@ def SettingsForm(*args, **kwargs):
         language = SelectField(_l("Language"), choices=SELECT_LANGUAGE_LIST)
         password = PasswordField(_l("Password"))
         confirm = PasswordField(_l("Current Password"))
-        affiliation = StringField(_l("Affiliation"))
+        affiliation = StringField("学号")
         website = URLField(_l("Website"))
         country = SelectField(_l("Country"), choices=SELECT_COUNTRIES_LIST)
         submit = SubmitField(_l("Submit"))
