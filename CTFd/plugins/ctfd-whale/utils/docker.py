@@ -74,7 +74,7 @@ class DockerUtils:
             resources=docker_types.Resources(
                 mem_limit=DockerUtils.convert_readable_text(
                     container.challenge.memory_limit),
-                cpu_limit=int(container.challenge.cpu_limit * 100000)
+                cpu_limit=int(container.challenge.cpu_limit * 1_000_000_000)
             ),
             labels={
                 'whale_id': f'{container.user_id}-{container.uuid}'
@@ -140,7 +140,7 @@ class DockerUtils:
                     mem_limit=DockerUtils.convert_readable_text(
                         container.challenge.memory_limit
                     ),
-                    cpu_limit=int(container.challenge.cpu_limit * 100000)),
+                    cpu_limit=int(container.challenge.cpu_limit * 1_000_000_000)),
                 labels={
                     'whale_id': f'{container.user_id}-{container.uuid}'
                 },
