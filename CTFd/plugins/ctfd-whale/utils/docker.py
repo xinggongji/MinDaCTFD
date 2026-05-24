@@ -68,29 +68,18 @@ class DockerUtils:
         client.services.create(
             image=container.challenge.docker_image,
             name=f'{container.user_id}-{container.uuid}',
+            env={'FLAG': container.flag},
+            dns_config=docker_types.DNSConfig(nameservers=dns),
+            networks=[get_config("whale:docker_auto_connect_network", "ctfd_frp-containers")],
+            resources=docker_types.Resources(
+                mem_limit=DockerUtils.convert_readable_text(
+                    container.challenge.memory_limit),
+                cpu_limit=int(container.challenge.cpu_limit * 100000)
+            ),
             labels={
                 'whale_id': f'{container.user_id}-{container.uuid}'
             },
-            task_template=docker_types.TaskTemplate(
-                container_spec=docker_types.ContainerSpec(
-                    image=container.challenge.docker_image,
-                    env={'FLAG': container.flag},
-                    dns_config=docker_types.DNSConfig(nameservers=dns),
-                ),
-                resources=docker_types.Resources(
-                    mem_limit=DockerUtils.convert_readable_text(
-                        container.challenge.memory_limit),
-                    cpu_limit=int(container.challenge.cpu_limit * 100000)
-                ),
-                placement=docker_types.Placement(
-                    constraints=['node.labels.name==' + node]
-                ),
-                networks=[
-                    docker_types.NetworkAttachmentConfig(
-                        target=get_config("whale:docker_auto_connect_network", "ctfd_frp-containers")
-                    )
-                ],
-            ),
+            constraints=['node.labels.name==' + node],
             endpoint_spec=docker_types.EndpointSpec(mode='dnsrr', ports={})
         )
 
@@ -142,28 +131,21 @@ class DockerUtils:
             client.services.create(
                 image=image,
                 name=container_name,
+                env={'FLAG': container.flag},
+                dns_config=docker_types.DNSConfig(nameservers=dns),
+                networks=[
+                    docker_types.NetworkAttachmentConfig(network_name, aliases=[name])
+                ],
+                resources=docker_types.Resources(
+                    mem_limit=DockerUtils.convert_readable_text(
+                        container.challenge.memory_limit
+                    ),
+                    cpu_limit=int(container.challenge.cpu_limit * 100000)),
                 labels={
                     'whale_id': f'{container.user_id}-{container.uuid}'
                 },
-                task_template=docker_types.TaskTemplate(
-                    container_spec=docker_types.ContainerSpec(
-                        image=image,
-                        env={'FLAG': container.flag},
-                        dns_config=docker_types.DNSConfig(nameservers=dns),
-                        hostname=name,
-                    ),
-                    resources=docker_types.Resources(
-                        mem_limit=DockerUtils.convert_readable_text(
-                            container.challenge.memory_limit
-                        ),
-                        cpu_limit=int(container.challenge.cpu_limit * 100000)),
-                    placement=docker_types.Placement(
-                        constraints=['node.labels.name==' + node]
-                    ),
-                    networks=[
-                        docker_types.NetworkAttachmentConfig(network_name, aliases=[name])
-                    ],
-                ),
+                constraints=['node.labels.name==' + node],
+                hostname=name,
                 endpoint_spec=docker_types.EndpointSpec(mode='dnsrr', ports={})
             )
 
