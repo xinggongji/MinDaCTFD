@@ -192,6 +192,6 @@
 
 {% block entrypoint %}
 	{% if solves or awards %}
-		<script defer src="{{ url_for('views.themes', path='js/pages/stats.js') }}"></script>
+		<script defer src="{{ url_for('views.themes', path='js/pages/stats.js', theme='core') }}"></script>
 	{% endif %}
 {% endblock %}

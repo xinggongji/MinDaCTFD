@@ -49,52 +49,88 @@ def load(app):
         categories = set(c['category'] for c in jchals)
         return [c for cat in categories for c in jchals if c['category'] == cat]
 
-    # 改造：支持按类型计算排名（总分/类型分）
+    # 改造：支持按类型计算排名（总分/类型分），兼容团队/个人模式
     def get_standings(category=None):
-        # 基础查询：获取所有团队/用户的解题记录
-        query = db.session.query(
-            Solves.team_id,
-            Teams.name,
-            func.sum(Challenges.value).label('score'),  # 总分
-            func.count(Solves.id).label('solve_count'),  # 解题数
-            func.max(Solves.date).label('last_solve_time')  # 最后解题时间
-        ).join(Challenges, Solves.challenge_id == Challenges.id
-        ).join(Teams, Solves.team_id == Teams.id)
-        
-        # 新增：按类型筛选
-        if category:
-            query = query.filter(Challenges.category == category)
-        
-        # 冻结时间过滤
-        freeze = utils.get_config('freeze')
-        if freeze and not is_admin():
-            freeze_time = unix_time_to_utc(freeze)
-            query = query.filter(Solves.date < freeze_time)
-        
-        # 分组计算
-        standings = query.group_by(Solves.team_id, Teams.name).order_by(
-            func.sum(Challenges.value).desc(),  # 按分数降序
-            func.count(Solves.id).asc()  # 同分按解题数升序
-        ).all()
+        if is_users_mode():
+            # 个人模式：按 user_id 聚合
+            query = db.session.query(
+                Solves.user_id,
+                Users.name,
+                func.sum(Challenges.value).label('score'),
+                func.count(Solves.id).label('solve_count'),
+                func.max(Solves.date).label('last_solve_time')
+            ).join(Challenges, Solves.challenge_id == Challenges.id
+            ).join(Users, Solves.user_id == Users.id)
 
-        # 补充每个团队的解题列表
-        result = []
-        for idx, standing in enumerate(standings):
-            team_id, name, score, solve_count, last_time = standing
-            # 获取该团队解出的题目ID
-            solves = db.session.query(Solves.challenge_id
-            ).filter(Solves.team_id == team_id).all()
-            solve_ids = [s[0] for s in solves]
-            result.append({
-                'rank': idx + 1,  # 排名
-                'teamid': team_id,
-                'name': name,
-                'score': score or 0,
-                'solve_count': solve_count,
-                'last_solve_time': last_time.strftime('%Y-%m-%d %H:%M:%S') if last_time else None,
-                'solves': solve_ids
-            })
-        return result
+            if category:
+                query = query.filter(Challenges.category == category)
+
+            freeze = utils.get_config('freeze')
+            if freeze and not is_admin():
+                freeze_time = unix_time_to_utc(freeze)
+                query = query.filter(Solves.date < freeze_time)
+
+            standings = query.group_by(Solves.user_id, Users.name).order_by(
+                func.sum(Challenges.value).desc(),
+                func.count(Solves.id).asc()
+            ).all()
+
+            result = []
+            for idx, standing in enumerate(standings):
+                user_id, name, score, solve_count, last_time = standing
+                solves = db.session.query(Solves.challenge_id
+                ).filter(Solves.user_id == user_id).all()
+                solve_ids = [s[0] for s in solves]
+                result.append({
+                    'rank': idx + 1,
+                    'teamid': user_id,
+                    'name': name,
+                    'score': score or 0,
+                    'solve_count': solve_count,
+                    'last_solve_time': last_time.strftime('%Y-%m-%d %H:%M:%S') if last_time else None,
+                    'solves': solve_ids
+                })
+            return result
+        else:
+            # 团队模式：按 team_id 聚合
+            query = db.session.query(
+                Solves.team_id,
+                Teams.name,
+                func.sum(Challenges.value).label('score'),
+                func.count(Solves.id).label('solve_count'),
+                func.max(Solves.date).label('last_solve_time')
+            ).join(Challenges, Solves.challenge_id == Challenges.id
+            ).join(Teams, Solves.team_id == Teams.id)
+
+            if category:
+                query = query.filter(Challenges.category == category)
+
+            freeze = utils.get_config('freeze')
+            if freeze and not is_admin():
+                freeze_time = unix_time_to_utc(freeze)
+                query = query.filter(Solves.date < freeze_time)
+
+            standings = query.group_by(Solves.team_id, Teams.name).order_by(
+                func.sum(Challenges.value).desc(),
+                func.count(Solves.id).asc()
+            ).all()
+
+            result = []
+            for idx, standing in enumerate(standings):
+                team_id, name, score, solve_count, last_time = standing
+                solves = db.session.query(Solves.challenge_id
+                ).filter(Solves.team_id == team_id).all()
+                solve_ids = [s[0] for s in solves]
+                result.append({
+                    'rank': idx + 1,
+                    'teamid': team_id,
+                    'name': name,
+                    'score': score or 0,
+                    'solve_count': solve_count,
+                    'last_solve_time': last_time.strftime('%Y-%m-%d %H:%M:%S') if last_time else None,
+                    'solves': solve_ids
+                })
+            return result
 
     # 新增：获取个人详细信息
     def get_user_details(user_id):
@@ -163,6 +199,7 @@ def load(app):
         return jsonify({
             'standings': [{
                 'pos': s['rank'],
+                'id': s['teamid'],
                 'team': s['name'],
                 'score': s['score'],
                 'solve_count': s['solve_count'],

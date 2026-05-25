@@ -49,12 +49,12 @@
                 </div>
         </footer>
 
-        <script defer src="{{ url_for('views.themes', path='js/vendor.bundle.js') }}"></script>
-        <script defer src="{{ url_for('views.themes', path='js/core.js') }}"></script>
-        <script defer src="{{ url_for('views.themes', path='js/helpers.js') }}"></script>
+        <script defer src="{{ url_for('views.themes', path='js/vendor.bundle.js', theme='core') }}"></script>
+        <script defer src="{{ url_for('views.themes', path='js/core.js', theme='core') }}"></script>
+        <script defer src="{{ url_for('views.themes', path='js/helpers.js', theme='core') }}"></script>
 
         {% block entrypoint %}
-        <script defer src="{{ url_for('views.themes', path='js/pages/main.js') }}"></script>
+        <script defer src="{{ url_for('views.themes', path='js/pages/main.js', theme='core') }}"></script>
         {% endblock %}
 
         {% block scripts %}

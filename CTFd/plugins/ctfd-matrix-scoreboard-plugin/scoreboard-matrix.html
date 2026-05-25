@@ -2,25 +2,46 @@
 
 {% block stylesheets %}
 <style>
-/* 保留类型导航样式，删除矩阵相关样式 */
 .category-nav {
     margin: 15px 0;
     padding: 10px;
     background: #f8f9fa;
     border-radius: 4px;
     overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
 .category-nav a {
     display: inline-block;
-    margin: 0 8px;
-    padding: 5px 10px;
+    margin: 0 4px 4px;
+    padding: 6px 12px;
     text-decoration: none;
     color: #333;
+    border-radius: 4px;
+    font-size: 14px;
 }
 .category-nav a.active {
     background: #007bff;
     color: white;
-    border-radius: 4px;
+}
+@media (max-width: 768px) {
+    .category-nav a {
+        font-size: 12px;
+        padding: 4px 8px;
+        margin: 0 2px 4px;
+    }
+    #scoreboard th, #scoreboard td {
+        font-size: 13px;
+        padding: 6px 4px;
+    }
+    #scoreboard th:nth-child(4),
+    #scoreboard td:nth-child(4) {
+        display: none;
+    }
+    #scoreboard th:nth-child(5),
+    #scoreboard td:nth-child(5) {
+        display: none;
+    }
 }
 </style>
 {% endblock %}
@@ -29,7 +50,6 @@
 <div class="jumbotron home">
     <div class="container">
         <h1>积分榜</h1>
-        <!-- 保留题目类型导航 -->
         <div class="category-nav">
             <a href="{{ url_for('scoreboard.listing') }}" class="{% if not current_category %}active{% endif %}">总分排名</a>
             {% for cat in categories %}
@@ -49,37 +69,35 @@
             <div class="row"><h1>积分榜已冻结</h1></div>
         {% endif %}
 
-        <!-- 去掉矩阵滚动容器，保留普通表格 -->
-        <table id="scoreboard" class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="5%" class="text-center"><b>排名</b></th>
-                    <th width="10%"><b>队伍</b></th>
-                    <th width="10%"><b>得分</b></th>
-                    <th width="10%"><b>解题数</b></th>
-                    <th width="15%"><b>最后解题时间</b></th>
-                    <!-- 删除题目列 -->
-                </tr>
-            </thead>
-            <tbody>
-                {% for team in standings %}
+        <div class="table-responsive">
+            <table id="scoreboard" class="table table-striped">
+                <thead>
                     <tr>
-                        <td>{{ team.rank }}</td>
-                        <td><a href="{{ url_for('user_detail', user_id=team.teamid) }}">{{ team.name }}</a></td>
-                        <td>{{ team.score }}</td>
-                        <td>{{ team.solve_count }}</td>
-                        <td>{{ team.last_solve_time or '-' }}</td>
-                        <!-- 删除解题标记列 -->
+                        <th class="text-center"><b>排名</b></th>
+                        <th><b>{% if mode == 'users' %}选手{% else %}队伍{% endif %}</b></th>
+                        <th><b>得分</b></th>
+                        <th><b>解题数</b></th>
+                        <th><b>最后解题</b></th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for team in standings %}
+                        <tr>
+                            <td class="text-center">{{ team.rank }}</td>
+                            <td><a href="{{ url_for('user_detail', user_id=team.teamid) }}">{{ team.name }}</a></td>
+                            <td>{{ team.score }}</td>
+                            <td>{{ team.solve_count }}</td>
+                            <td>{{ team.last_solve_time or '-' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 </div>
 {% endblock %}
 
 {% block scripts %}
-<!-- 保留必要脚本，删除矩阵相关逻辑 -->
 <script src="{{ request.script_root }}/themes/{{ theme }}/static/js/utils.js"></script>
 <script src="{{ request.script_root }}/matrix/static/scoreboard-matrix.js"></script>
 {% endblock %}

@@ -67,16 +67,18 @@
                             {% for file in files %}
                             <div class='col-md-4 col-sm-4 col-xs-12 file-button-wrapper d-block'>
                                 <a class='btn btn-info btn-file mb-1 d-inline-block px-2 w-100 text-truncate'
-                                   href='{{ file }}'
-                                   onclick="return handleFileClick(this)">
-                                    <i class="fas fa-download"></i>
-                                    <small>
-                                        {% set file_str = file | string %}
-                                        {% set segments = file_str.split('/') %}
-                                        {% set file_name_with_params = segments[-1] if segments else '' %}
-                                        {% set file_part = file_name_with_params.split('?')[0] %}
-                                        {{ file_part | urldecode }}
-                                    </small>
+                                    href='{{ file }}'>
+                                     <i class="fas fa-download"></i>
+                                     <small>
+                                         {% set segments = file.split('/') %}
+                                         {% set file = segments | last %}
+                                         {% set token = file.split('?') | last %}
+                                         {% if token %}
+                                             {{ file | replace("?" + token, "") }}
+                                         {% else %}
+                                             {{ file }}
+                                         {% endif %}
+                                     </small>
                                 </a>
                             </div>
                             {% endfor %}

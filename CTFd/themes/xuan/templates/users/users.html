@@ -47,9 +47,8 @@
 					<thead>
 					<tr>
 						<td><b>昵称</b></td>
-						<td><b>网站</b></td>
+						<td><b>班级</b></td>
 						<td class="d-none d-md-table-cell d-lg-table-cell"><b>学号</b></td>
-						<td class="d-none d-md-table-cell d-lg-table-cell"><b>国家</b></td>
 					</tr>
 					</thead>
 					<tbody>
@@ -69,34 +68,13 @@
 									</a>
 								{% endif %}
 							</td>
-							<td class="text-center" style="width: 10px;">
-								{% if user.website and (user.website.startswith('http://') or user.website.startswith('https://')) %}
-									<a href="{{ user.website }}" target="_blank" rel="noopener">
-										<i class="fas fa-external-link-alt" data-toggle="tooltip" data-placement="top"
-										   title="{{ user.website }}"></i>
-									</a>
-								{% endif %}
+							<td>
+								<span>{{ user.classname or '' }}</span>
 							</td>
 							<td class="d-none d-md-table-cell d-lg-table-cell">
 								{% if user.affiliation %}
-									{% if user.affiliation | length > 50 %}
-										<span data-toggle="tooltip" data-placement="top" title="{{ user.affiliation }}">
-									{% if user.affiliation %}{{ user.affiliation | truncate(50) }}{% endif %}
-								</span>
-									{% else %}
-										<span>
-									{% if user.affiliation %}{{ user.affiliation | truncate(50) }}{% endif %}
-								</span>
-									{% endif %}
+									<span>{{ user.affiliation | truncate(50) }}</span>
 								{% endif %}
-							</td>
-							<td class="d-none d-md-table-cell d-lg-table-cell">
-								<span>
-									{% if user.country %}
-										<i class="flag-{{ user.country.lower() }}"></i>
-										{{ lookup_country_code(user.country) }}
-									{% endif %}
-								</span>
 							</td>
 						</tr>
 					{% endfor %}
