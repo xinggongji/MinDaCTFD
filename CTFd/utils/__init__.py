@@ -2,7 +2,6 @@ import json
 from enum import Enum
 
 import cmarkgfm
-from cmarkgfm.cmark import Options
 from flask import current_app as app
 
 # isort:imports-firstparty
@@ -18,7 +17,6 @@ def markdown(md):
     return cmarkgfm.markdown_to_html_with_extensions(
         md,
         extensions=["autolink", "table", "strikethrough"],
-        options=Options.CMARK_OPT_UNSAFE,
     )
 
 

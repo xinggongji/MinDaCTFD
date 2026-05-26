@@ -84,7 +84,7 @@ class Pages(db.Model):
     draft = db.Column(db.Boolean)
     hidden = db.Column(db.Boolean)
     auth_required = db.Column(db.Boolean)
-    format = db.Column(db.String(80), default="markdown")
+    format = db.Column(db.String(80), default="html")
     link_target = db.Column(db.String(80), nullable=True)
 
     files = db.relationship("PageFiles", backref="page")

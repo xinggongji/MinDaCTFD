@@ -1,8 +1,5 @@
-import random
 import uuid
 from datetime import datetime
-
-from jinja2 import Template
 
 from CTFd.utils import get_config
 from CTFd.models import db
@@ -74,9 +71,10 @@ class WhaleContainer(db.Model):
 
     @property
     def http_subdomain(self):
-        return Template(get_config(
-            'whale:template_http_subdomain', '{{ container.uuid }}'
-        )).render(container=self)
+        template = get_config(
+            'whale:template_http_subdomain', '{container.uuid}'
+        )
+        return template.format(container=self)
 
     def __init__(self, user_id, challenge_id):
         self.user_id = user_id
@@ -84,21 +82,24 @@ class WhaleContainer(db.Model):
         self.start_time = datetime.now()
         self.renew_count = 0
         self.uuid = str(uuid.uuid4())
-        self.flag = Template(get_config(
-            'whale:template_chall_flag', '{{ "flag{"+uuid.uuid4()|string+"}" }}'
-        )).render(container=self, uuid=uuid, random=random, get_config=get_config)
+        template = get_config(
+            'whale:template_chall_flag', 'flag{{{uuid}}}'
+        )
+        self.flag = template.format(uuid=self.uuid)
 
     @property
     def user_access(self):
-        return Template(WhaleRedirectTemplate.query.filter_by(
+        template = WhaleRedirectTemplate.query.filter_by(
             key=self.challenge.redirect_type
-        ).first().access_template).render(container=self, get_config=get_config)
+        ).first().access_template
+        return template.format(container=self)
 
     @property
     def frp_config(self):
-        return Template(WhaleRedirectTemplate.query.filter_by(
+        template = WhaleRedirectTemplate.query.filter_by(
             key=self.challenge.redirect_type
-        ).first().frp_template).render(container=self, get_config=get_config)
+        ).first().frp_template
+        return template.format(container=self)
 
     def __repr__(self):
         return "<WhaleContainer ID:{0} {1} {2} {3} {4}>".format(self.id, self.user_id, self.challenge_id,

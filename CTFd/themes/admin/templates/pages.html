@@ -6,9 +6,9 @@
 {% block content %}
 <div class="jumbotron">
 	<div class="container">
-		<h1>Pages
+		<h1>页面管理
 			<a class="no-decoration" href="{{ url_for('admin.pages_new') }}">
-				<span class="create-page" role="button" data-toggle="tooltip" title="Create Page">
+				<span class="create-page" role="button" data-toggle="tooltip" title="新建页面">
 					<i class="btn-fa fas fa-plus-circle"></i>
 				</span>
 			</a>
@@ -21,7 +21,7 @@
 		<div class="col-md-12">
 			<div class="float-right pb-3">
 				<div class="btn-group" role="group">
-					<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="Delete Pages" id="pages-delete-button">
+					<button type="button" class="btn btn-outline-danger" data-toggle="tooltip" title="删除页面" id="pages-delete-button">
 						<i class="btn-fa fas fa-trash-alt"></i>
 					</button>
 				</div>
@@ -38,11 +38,11 @@
 							<input type="checkbox" class="form-check-input" id="pages-bulk-select" autocomplete="off" data-checkbox-all>&nbsp;
 						</div>
 					</th>
-					<th class="sort-col text-center"><b>Title</b></th>
-					<th class="sort-col text-center"><b>Route</b></th>
-					<th class="sort-col text-center"><b>Authentication</b></th>
-					<th class="sort-col text-center"><b>Hidden</b></th>
-					<th class="sort-col text-center"><b>Published</b></th>
+					<th class="sort-col text-center"><b>标题</b></th>
+					<th class="sort-col text-center"><b>路由</b></th>
+					<th class="sort-col text-center"><b>认证</b></th>
+					<th class="sort-col text-center"><b>隐藏</b></th>
+					<th class="sort-col text-center"><b>状态</b></th>
 				</tr>
 				</thead>
 				<tbody>
@@ -63,21 +63,21 @@
 						</td>
 						<td class="text-center">
 							{% if page.auth_required %}
-							Required
+							需要登录
 							{% else %}
 							{% endif %}
 						</td>
 						<td class="text-center">
 							{% if page.hidden %}
-								Hidden
+								已隐藏
 							{% else %}
 							{% endif %}
 						</td>
 						<td class="text-center">
 							{% if page.draft %}
-								Draft
+								草稿
 							{% else %}
-								Published
+								已发布
 							{% endif %}
 						</td>
 					</tr>

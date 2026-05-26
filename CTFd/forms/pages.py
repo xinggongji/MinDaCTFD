@@ -13,36 +13,36 @@ from CTFd.forms import BaseForm
 
 class PageEditForm(BaseForm):
     title = StringField(
-        "Title", description="This is the title shown on the navigation bar"
+        "标题", description="页面标题，显示在导航栏中"
     )
     route = StringField(
-        "Route",
-        description="This is the URL route that your page will be at (e.g. /page). You can also enter links to link to that page.",
+        "路由",
+        description="页面的 URL 路由（例如 /page），也可以输入链接地址",
     )
-    draft = BooleanField("Draft")
-    hidden = BooleanField("Hidden")
-    auth_required = BooleanField("Authentication Required")
-    content = TextAreaField("Content")
+    draft = BooleanField("草稿")
+    hidden = BooleanField("隐藏")
+    auth_required = BooleanField("需要登录")
+    content = TextAreaField("内容")
     format = SelectField(
-        "Format",
-        choices=[("markdown", "Markdown"), ("html", "HTML")],
-        default="markdown",
+        "格式",
+        choices=[("html", "HTML")],
+        default="html",
         validators=[InputRequired()],
-        description="The markup format used to render the page",
+        description="页面渲染格式",
     )
     link_target = SelectField(
-        "Target",
-        choices=[("", "Current Page"), ("_blank", "New Tab")],
+        "打开方式",
+        choices=[("", "当前页面"), ("_blank", "新标签页")],
         default="",
         validators=[],
-        description="Context to open page in",
+        description="页面打开的目标位置",
     )
 
 
 class PageFilesUploadForm(BaseForm):
     file = MultipleFileField(
-        "Upload Files",
-        description="Attach multiple files using Control+Click or Cmd+Click.",
+        "上传文件",
+        description="使用 Ctrl+点击 或 Cmd+点击 附加多个文件",
         validators=[InputRequired()],
     )
-    type = HiddenField("Page Type", default="page", validators=[InputRequired()])
+    type = HiddenField("页面类型", default="page", validators=[InputRequired()])

@@ -1,7 +1,7 @@
 {% for config, val in {
-    "API URL": ("trp_api_url", "trp API to connect to"),
-    "Domain Suffix": ("trp_domain_suffix", "Will be used to generated the access link of a challenge"),
-    "Listening Port": ("trp_listening_port", "Will be used to generated the access link of a challenge"),
+    "API 地址": ("trp_api_url", "TRP API 连接地址"),
+    "域名后缀": ("trp_domain_suffix", "用于生成题目访问链接"),
+    "监听端口": ("trp_listening_port", "用于生成题目访问链接"),
 }.items() %}
 {% set value = get_config('whale:' + val[0]) %}
 <div class="form-group">

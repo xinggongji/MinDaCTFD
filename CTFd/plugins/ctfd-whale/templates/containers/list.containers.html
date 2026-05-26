@@ -9,13 +9,13 @@
                     </div>
                 </th>
                 <th class="sort-col text-center"><b>ID</b></td>
-                <th class="text-center"><b>User</b></td>
-                <th class="sort-col text-center"><b>Challenge</b></td>
-                <th class="text-center"><b>Access Method</b></td>
+                <th class="text-center"><b>用户</b></td>
+                <th class="sort-col text-center"><b>题目</b></td>
+                <th class="text-center"><b>访问方式</b></td>
                 <th class="text-center"><b>Flag</b></td>
-                <th class="sort-col text-center"><b>Startup Time</b></td>
-                <th class="sort-col text-center"><b>Renewal Times</b></td>
-                <th class="text-center"><b>Delete</b></td>
+                <th class="sort-col text-center"><b>启动时间</b></td>
+                <th class="sort-col text-center"><b>续期次数</b></td>
+                <th class="text-center"><b>删除</b></td>
             </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                         <button class="btn btn-link p-0 renew-container"
                            container-id="{{ container.id }}" data-toggle="tooltip"
                            user-id="{{ container.user.id }}" data-placement="top"
-                           title="Renew Container #{{ container.id }}">
+                           title="续期容器 #{{ container.id }}">
                             <i class="fas fa-sync"></i>
                         </button>
                     </td>
@@ -66,7 +66,7 @@
                         <button class="btn btn-link p-0 delete-container"
                            container-id="{{ container.id }}" data-toggle="tooltip"
                            user-id="{{ container.user.id }}" data-placement="top"
-                           title="Destroy Container #{{ container.id }}">
+                           title="销毁容器 #{{ container.id }}">
                             <i class="fas fa-times"></i>
                     </button>
                     </td>

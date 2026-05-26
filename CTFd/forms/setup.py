@@ -137,6 +137,6 @@ class SetupForm(BaseForm):
     )
     end = StringField(
         "结束时间",
-        description=_l("Time when your CTF is scheduled to end. Optional."),
+        description="CTF 计划结束的时间。可选。",
     )
-    submit = SubmitField(_l("Finish"))
+    submit = SubmitField("完成")

@@ -20,8 +20,8 @@ def setup_default_configs():
         'frp_http_domain_suffix': '127.0.0.1.nip.io',
         'frp_direct_port_maximum': '10100',
         'frp_direct_port_minimum': '10000',
-        'template_http_subdomain': '{{ container.uuid }}',
-        'template_chall_flag': '{{ "flag{"+uuid.uuid4()|string+"}" }}',
+        'template_http_subdomain': '{container.uuid}',
+        'template_chall_flag': 'flag{{{uuid}}}',
     }.items():
         set_config('whale:' + key, val)
     db.session.add(WhaleRedirectTemplate(
